@@ -14,14 +14,16 @@ $(document).ready(function() {
     });
 
     $('#win_insert').window({
-        fit: true,
-        fitColumns: true,
-        modal: true,
+        top:40,
+        width:1366,
+        height:590,
+        fit: false,
+        modal: false,
         closed: true,
-        iconCls: 'icon-save',
+        iconCls: 'icon-edit',
         collapsible: false,
         minimizable: false,
-        maximizable: false
+        maximizable: true
     });
     $('#panel_insert').panel({
         href: component_location+'/insert_penjualan.php'

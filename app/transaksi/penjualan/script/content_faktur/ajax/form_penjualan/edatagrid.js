@@ -13,6 +13,7 @@ $(document).ready(function () {
         iconCls: 'icon-edit',
         singleSelect: true,
         fit: true,
+        fitColumn: true,
         rownumbers: true,
         toolbar: [
             {
@@ -66,11 +67,13 @@ $(document).ready(function () {
                 }
             },
         ],
-        columns: [
-            [{
+        columns: [[
+            {
                 title: 'Jumlah',
                 field: 'jumlah',
-                width: 60,
+                align: 'center',
+                halign: 'center',
+                width: 50,
                 editor: {
                     type: 'numberbox',
                     options: {
@@ -81,7 +84,9 @@ $(document).ready(function () {
                 {
                     title: 'Satuan',
                     field: 'satuan',
-                    width: 80,
+                    align: 'center',
+                    halign: 'center',
+                    width: 60,
                     editor: {
                         type: 'textbox',
                         options: {
@@ -92,6 +97,8 @@ $(document).ready(function () {
                 {
                     title: 'Barang',
                     field: 'barang',
+                    align: 'center',
+                    halign: 'center',
                     width: 200,
                     formatter: function (value, row) {
                         return row.productname;
@@ -167,7 +174,9 @@ $(document).ready(function () {
                 {
                     title: 'Spesifikasi',
                     field: 'spesifikasi',
-                    width: 150,
+                    align: 'center',
+                    halign: 'center',
+                    width: 120,
                     editor: {
                         type: 'textbox',
                         options: {
@@ -178,8 +187,9 @@ $(document).ready(function () {
                 {
                     title: 'Harga Beli',
                     field: 'harga_beli',
-                    width: 100,
                     align: 'right',
+                    halign: 'center',
+                    width: 100,
                     editor: {
                         type: 'numberbox',
                         options: {
@@ -191,6 +201,7 @@ $(document).ready(function () {
                 {
                     title: 'Harga Dasar',
                     field: 'harga_dasar',
+                    halign: 'center',
                     width: 100,
                     align: 'right',
                     editor: {
@@ -204,6 +215,7 @@ $(document).ready(function () {
                 {
                     title: 'Harga Jual',
                     field: 'harga_jual',
+                    halign: 'center',
                     width: 100,
                     align: 'right',
                     editor: {
@@ -216,6 +228,7 @@ $(document).ready(function () {
                 {
                     title: 'Disc %',
                     field: 'discpersen',
+                    halign: 'center',
                     width: 100,
                     editor: {
                         type: 'numberbox',
@@ -227,6 +240,8 @@ $(document).ready(function () {
                 {
                     title: 'Disc Rp.',
                     field: 'discrupiah',
+                    align: 'right',
+                    halign: 'center',
                     width: 100,
                     editor: {
                         type: 'numberbox',
@@ -238,7 +253,9 @@ $(document).ready(function () {
                 {
                     title: 'Sub Total',
                     field: 'subtotal',
-                    width: 200,
+                    align: 'right',
+                    halign: 'center',
+                    width: 150,
                     editor: {
                         type: 'numberbox',
                         options: {
@@ -250,21 +267,24 @@ $(document).ready(function () {
                 {
                     title: 'Colly',
                     field: 'colly',
-                    width: 80,
+                    halign: 'center',
+                    width: 50,
                     align: 'right',
                     editor: 'textbox'
                 },
                 {
                     title: 'Ket',
                     field: 'ket',
-                    width: 200,
+                    halign: 'center',
+                    width: 50,
                     align: 'right',
                     editor: 'textbox'
                 },
                 {
                     title: 'Ket SO',
                     field: 'ket_so',
-                    width: 200,
+                    halign: 'center',
+                    width: 100,
                     align: 'right',
                     editor: 'textbox'
                 },
@@ -275,7 +295,7 @@ $(document).ready(function () {
                     editor: {
                         type: 'numberbox',
                         options: {
-                            precision: 2,
+                            precision: 0,
                             readonly: true
                         }
                     }

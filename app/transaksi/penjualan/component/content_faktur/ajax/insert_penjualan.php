@@ -1,60 +1,86 @@
-<form id="formid" method="post" novalidate>
-    <input id="dt_kode_tipe" name="kode_tipe" type="hidden">
-    <div style="margin-bottom:5px;padding: 5px 5px;">
-        <input class="easyui-textbox" name="no_faktur" id="no_faktur" readonly style="width:40%"
-               data-options="label:'No Faktur',required:true">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input class="easyui-textbox" name="tgl_jth_tempo" readonly="readonly" id="dtjth_tempo" style="width:40%"
-               data-options="label:'Tgl Jth Tempo'">
-    </div>
-    <div style="margin-bottom:5px;padding: 5px 5px;">
-        <input id="dtgudang" class="easyui-combobox" label="Gudang" name="gudang" style="width:40%">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input class="easyui-numberbox" name="total" id="total" readonly="readonly" style="width:40%"
-               data-options="label:'Total',min:0,precision:2">
-    </div>
-    <div style="margin-bottom:5px;padding: 5px 5px;">
+<div id="panel_form_penjualan" title="Deskripsi Penjualan" style="width: 100%; padding: 8px 8px 8px 8px; overflow: hidden">
+    <table style="width: 100%">
+        <tr style="margin-bottom:10px">
+            <td style="width: 50%">
+                <input name="no_faktur" id="no_faktur" readonly style="width:100% ; height: 24px">
+            </td>
+            <td style="width: 50%">
+                <input name="tgl_jth_tempo" id="dtjth_tempo" readonly style="width:100% ; height: 24px">
+            </td>
+        </tr>
+    </table>
+    <table style="width: 100%">
+        <tr style="margin-bottom:10px">
+            <td style="width: 50%">
+                <input id="dtgudang" name="gudang" style="width:100% ; height: 24px">
+            </td>
+            <td style="width: 50%">
+                <input id="total" name="total" readonly style="width:100% ; height: 24px">
+            </td>
+        </tr>
+    </table>
+    <table style="width: 100%">
+        <tr style="margin-bottom:10px">
+            <td style="width: 50%">
+                <input id="dtcustomer" name="customer" style="width:100% ; height: 24px">
+            </td>
+            <td style="width: 50%">
+                <input id="diskonpersen" name="diskonpersen" style="width:100% ; height: 24px">
+            </td>
+        </tr>
+    </table>
+    <table style="width: 100%">
+        <tr style="margin-bottom:10px">
+            <td style="width: 25%">
+                <input id="dttanggal" name="tanggal" style="width:100% ; height: 24px">
+            </td>
+            <td style="width: 25%">
+                <input id="dtmobil" name="mobil" style="width:100% ; height: 24px">
+            </td>
+            <td style="width: 50%">
+                <input id="diskonrp" name="diskonrp" style="width:100% ; height: 24px">
+            </td>
+        </tr>
+    </table>
+    <table style="width: 100%">
+        <tr style="margin-bottom:10px">
+            <td style="width: 50%">
+                <input id="salesman" name="salesman" style="width:100% ; height: 24px">
+            </td>
+            <td style="width: 50%">
+                <input id="grandtotal" name="grandtotal" readonly style="width:100% ; height: 24px">
+            </td>
+        </tr>
+    </table>
+    <table style="width: 100%">
+        <tr style="margin-bottom:10px">
+            <td style="width: 50%">
+                <label style="margin-right: 100px">Status</label>
+                <input id="status1" name="status">&nbsp;&nbsp;&nbsp;
+                <input id="status2" name="status">
+            </td>
+            <td style="width: 50%">
+                <input id="keterangan" name="keterangan" style="width:100% ; height: 24px">
+            </td>
+        </tr>
+    </table>
+    <table style="width: 100%">
+        <tr style="margin-bottom:10px">
+            <td style="width: 50%">
+                <input id="dttipe" name="tipe_harga" readonly style="width:100% ; height: 24px">
+            </td>
+            <td style="width: 50%">
 
-        <input id="dtcustomer" label="Customer" name="customer" style="width:40%">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input class="easyui-numberbox" name="diskonpersen" id="diskonpersen" style="width:40%">
-    </div>
-    <div style="margin-bottom:5px;padding: 5px 5px;">
-        <input class="easyui-datebox" name="tanggal" id="dttanggal" style="width:20%">
-        &nbsp;&nbsp;
-        <input id="dtmobil" class="easyui-combobox" label="Mobil" name="mobil" style="width:19%">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input class="easyui-numberbox" name="diskonrp" style="width:40%" id="diskonrp">
-    </div>
-    <div style="margin-bottom:5px;padding: 5px 5px;">
-        <input id="dtmobil" class="easyui-combobox" id="salesman" label="Salesman" name="salesman" style="width:40%">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input class="easyui-numberbox" name="grandtotal" style="width:40%" id="grandtotal" readonly="readonly"
-               data-options="label:'Grand Total',min:0,precision:2">
-    </div>
-    <div style="margin-bottom:5px;padding: 5px 5px;">
-        <label>Status</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr>
+    </table>
+</div>
+<table id="dg_penjualan" style="height: 800px;"></table>
 
-        <input id="status1" name="status" label="Status">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input id="status2" name="status">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="hidden" name="hpp" id="dthpp" value="">
-        <input type="hidden" name="profit" id="dtprofit" value="">
-    </div>
-    <div style="margin-bottom:5px;padding: 5px 5px;">
-        <input id="dttipe" readonly="readonly" class="easyui-textbox" name="tipe_harga" label="Tipe Harga"
-               style="width:40%" data-options="valueField:'nama_tipe'">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input class="easyui-textbox" name="keterangan" id="keterangan" style="width:40%"
-               data-options="label:'Keterangan'">
-    </div>
-</form>
-<br>
-<!-- Pembaruan yang telah dilakukan-->
-<table id="dg_penjualan" style="width:100%;max-width: auto;height:auto;"></table>
-
+<input id="dt_kode_tipe" name="kode_tipe" type="hidden">
+<input id="dthpp" name="hpp" type="hidden">
+<input id="dtprofit" name="profit" type="hidden">
 <div id="wsearch" title="Search Barang" style="width:900px;height:500px;padding:10px;"></div>
-
 <?php
 $script_path = 'app/transaksi/penjualan/script/content_faktur/ajax/form_penjualan/';
 ?>
