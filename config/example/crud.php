@@ -21,4 +21,4 @@ $db = new SQLAnywhere();
  */
 
 $sql = '';
-return $db->get($sql);
+print $db->get($sql);

@@ -19,7 +19,7 @@ class SQLAnywhere extends App {
      * @param $result_type
      * @return array|Exception|false|string
      */
-    public function get($sql, $json = true, $result_type = 'ARRAY') {
+    public function get($sql, $json = false, $result_type = 'ARRAY') {
         try {
             $query = sasql_query($this->connection, $sql);
             if ($result_type == 'ARRAY') {

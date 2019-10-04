@@ -4,24 +4,18 @@
  */
 spl_autoload_register(function ($class_name) {
     $php_self_exp = explode('/', $_SERVER['PHP_SELF']);
-    include($_SERVER['DOCUMENT_ROOT'] . '/'.$php_self_exp[1].'/config/system/' . $class_name . '.php');
+    include($_SERVER['DOCUMENT_ROOT'] . '/' . $php_self_exp[1] . '/config/system/' . $class_name . '.php');
 });
 
 /**
- * Deklarasi query builder
- * Yang tersedia : 1) Codeigniter Query Builder, DOC : https://codeigniter.com/user_guide/database/query_builder.html
- *                 2) Illuminate Eloquent, DOC : https://laravel.com/docs/5.2/queries
- *
- * Contoh script : 1) $codeigniter::query()->get('nama_tabel')->result();
- *                 2) $eloquent::query()->table('nama_tabel')->get();
- *
- * Info          : Query builder bisa digunakan keduanya atau salah satu, sesuai kebutuhan
+ * Path : root_path/config/SQLAnywhere
  */
-$codeigniter = new Codeigniter();
-//$eloquent = new Eloquent();
+$db = new SQLAnywhere();
 
 /**
  * Proses CRUD
+ * Contoh : $db->get('sql_script', 'json_condition', 'result_type')
+ *
  * Disarankan untuk menggunakan htmlspecialchars() setiap request POST/GET AJAX,
  * DOC : https://www.php.net/manual/en/function.htmlspecialchars.php
  */
@@ -36,10 +30,11 @@ if (isset($_POST['gudang']) AND isset($_POST['tgl_mulai']) AND isset($_POST['tgl
     $tgl_mulai_db  = $EXP_tgl_mulai[2].'-'.$EXP_tgl_mulai[1].'-'.$EXP_tgl_mulai[0];
     $tgl_akhir_db  = $EXP_tgl_akhir[2].'-'.$EXP_tgl_akhir[1].'-'.$EXP_tgl_akhir[0];
 
-    $query = $codeigniter->query()->select('tanggal, no_faktur, modifydate, cetak, flag_hrgtipe')->from('master_jual')->where("tanggal >= '$tgl_mulai_db'")->where("tanggal <= '$tgl_akhir_db'")->where("gudang = '$gudang'")->get()->result_array();
+    $sql = "SELECT tanggal, no_faktur, modifydate, cetak, flag_hrgtipe FROM master_jual where tanggal between '$tgl_mulai_db' and '$tgl_akhir_db' and gudang = '$gudang'";
+    $fetch = $db->get($sql, false);
 
     $result = array();
-    foreach ($query as $row) {
+    foreach ($fetch as $row) {
         $nf  = $row['no_faktur'];
         $f1  = substr($nf, 0, -12);
         $f2  = substr($nf, 2, -8);

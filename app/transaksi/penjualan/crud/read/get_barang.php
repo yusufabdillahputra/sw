@@ -8,31 +8,26 @@ spl_autoload_register(function ($class_name) {
 });
 
 /**
- * Deklarasi query builder
- * Yang tersedia : 1) Codeigniter Query Builder, DOC : https://codeigniter.com/user_guide/database/query_builder.html
- *                 2) Illuminate Eloquent, DOC : https://laravel.com/docs/5.2/queries
- *
- * Contoh script : 1) $codeigniter::query()->get('nama_tabel')->result();
- *                 2) $eloquent::query()->table('nama_tabel')->get();
- *
- * Info          : Query builder bisa digunakan keduanya atau salah satu, sesuai kebutuhan
+ * Path : root_path/config/SQLAnywhere
  */
-$codeigniter = new Codeigniter();
-//$eloquent = new Eloquent();
+$db = new SQLAnywhere();
 
 /**
  * Proses CRUD
+ * Contoh : $db->get('sql_script', 'json_condition', 'result_type')
+ *
  * Disarankan untuk menggunakan htmlspecialchars() setiap request POST/GET AJAX,
  * DOC : https://www.php.net/manual/en/function.htmlspecialchars.php
  */
 
-$query = $codeigniter->query()->get('barang')->result_array();
+$sql = 'SELECT * FROM Barang';
+$fetch = $db->get($sql, false);
 
- $result = array();
- foreach ($query as $row) {
-     array_push($result, [
-					'barang'      => $row['ID'],
-					'productname' => $row['NAMA']
-     ]);
- }
- echo json_encode($result);
+$result = array();
+foreach ($fetch as $row) {
+    array_push($result, [
+        'barang'      => $row['ID'],
+        'productname' => $row['NAMA']
+    ]);
+}
+echo json_encode($result);

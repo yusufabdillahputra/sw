@@ -20,5 +20,5 @@ $db = new SQLAnywhere();
  * DOC : https://www.php.net/manual/en/function.htmlspecialchars.php
  */
 
-$sql = '';
-return $db->rawSql($sql);
+$sql = "SELECT id, nama FROM pegawai where tipe_peg = 'SLS'";
+print $db->get($sql, true);
