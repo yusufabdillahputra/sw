@@ -19,7 +19,7 @@ class SQLAnywhere extends App {
      * @param $result_type
      * @return array|Exception|false|string
      */
-    public function rawSql($sql, $json = true, $result_type = 'ARRAY') {
+    public function get($sql, $json = true, $result_type = 'ARRAY') {
         try {
             $query = sasql_query($this->connection, $sql);
             if ($result_type == 'ARRAY') {
@@ -43,6 +43,67 @@ class SQLAnywhere extends App {
         }
     }
 
+    public function insert($sql, $return_status = false) {
+        try {
+            sasql_query($this->connection, $sql);
+            if ($return_status == true) {
+                $status = array(
+                    'code' => 200,
+                    'message' => 'Insert berhasil',
+                    'sql' => $sql
+                );
+                return json_encode($status);
+            }
+        } catch (Exception $error) {
+            $status = array(
+                'code' => 500,
+                'message' => "Internal Server Error : <br>".$error."<hr>",
+                'sql' => $sql
+            );
+            return json_encode($status);
+        }
+    }
 
+    public function update($sql, $return_status = false) {
+        try {
+            sasql_query($this->connection, $sql);
+            if ($return_status == true) {
+                $status = array(
+                    'code' => 200,
+                    'message' => 'Update berhasil',
+                    'sql' => $sql
+                );
+                return json_encode($status);
+            }
+        } catch (Exception $error) {
+            $status = array(
+                'code' => 500,
+                'message' => "Internal Server Error : <br>".$error."<hr>",
+                'sql' => $sql
+            );
+            return json_encode($status);
+        }
+    }
+
+    public function delete($sql, $return_status = false) {
+        try {
+            sasql_query($this->connection, $sql);
+            if ($return_status == true) {
+                $status = array(
+                    'code' => 200,
+                    'message' => 'Delete berhasil',
+                    'sql' => $sql
+                );
+                return json_encode($status);
+            }
+        } catch (Exception $error) {
+            $status = array(
+                'code' => 500,
+                'message' => "Internal Server Error : <br>".$error."<hr>",
+                'sql' => $sql
+            );
+            return json_encode($status);
+        }
+    }
 
 }

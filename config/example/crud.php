@@ -14,11 +14,11 @@ $db = new SQLAnywhere();
 
 /**
  * Proses CRUD
- * Contoh : $db->rawSql('sql_script', 'json_condition', 'result_type')
+ * Contoh : $db->get('sql_script', 'json_condition', 'result_type')
  *
  * Disarankan untuk menggunakan htmlspecialchars() setiap request POST/GET AJAX,
  * DOC : https://www.php.net/manual/en/function.htmlspecialchars.php
  */
 
 $sql = '';
-return $db->rawSql($sql);
+return $db->get($sql);
