@@ -486,19 +486,21 @@ $(document).ready(function () {
                 },
                 success: function (data) {
                     console.log('ini isi data headernya =', data);
-                }
-            });
-
-            $.ajax({
-                method: 'post',
-                url: component_location + '/crud/create/save_dtl_penjualan.php',
-                data: {
-                    'params': rows,
-                    'no_faktur': $('#no_faktur').textbox('getValue'),
-                    'gudang': $('#dtgudang').combobox('getValue')
-                },
-                success: function (data) {
-                    console.log('ini isi datanya =', data);
+                    $.ajax({
+                        async:false,
+                        global:false,
+                        dataType: 'html',
+                        method: 'post',
+                        url: component_location + '/crud/create/save_dtl_penjualan.php',
+                        data: {
+                            'params': rows,
+                            'no_faktur': $('#no_faktur').textbox('getValue'),
+                            'gudang': $('#dtgudang').combobox('getValue')
+                        },
+                        success: function (data) {
+                            console.log('ini isi datanya =', data);
+                        }
+                    });
                 }
             });
         }

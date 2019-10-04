@@ -1,15 +1,17 @@
 <?php
 
-use Dotenv\Dotenv;
-
 class App
 {
 
+    protected $DB;
+
     public function __construct()
     {
-        require __DIR__ . '\..\..\vendor\autoload.php';
-        $dotenv = Dotenv::create(__DIR__ . '\..\..');
-        $dotenv->load();
+        $this->DB = [
+            'DB_USERNAME' => "dba",
+            'DB_PASSWORD' => "fauzan123",
+            'DB_NAME' => "sejahtera"
+        ];
     }
 
 }

@@ -1,7 +1,0 @@
-{
-  "require": {
-    "vlucas/phpdotenv": "^3.6",
-    "illuminate/database":  "5.2.45",
-    "evolution/codeigniterdb":  "dev-master"
-  }
-}
