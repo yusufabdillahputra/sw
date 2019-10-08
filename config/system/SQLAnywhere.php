@@ -43,6 +43,30 @@ class SQLAnywhere extends App {
         }
     }
 
+    public function first($sql, $json = false, $result_type = 'ARRAY') {
+        try {
+            $query = sasql_query($this->connection, $sql);
+            if ($result_type == 'ARRAY') {
+                $result = array();
+                while ($row = sasql_fetch_assoc($query)) {
+                    array_push($result, $row);
+                }
+            } elseif ($result_type == 'OBJECT') {
+                $result = array();
+                while ($row = sasql_fetch_object($query)) {
+                    $result[] = $row;
+                }
+            }
+            if ($json == true) {
+                return json_encode($result[0]);
+            } elseif ($json == false) {
+                return $result[0];
+            }
+        } catch (Exception $error) {
+            return $error;
+        }
+    }
+
     public function insert($sql, $return_status = false) {
         try {
             sasql_query($this->connection, $sql);

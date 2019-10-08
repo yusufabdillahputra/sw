@@ -68,8 +68,8 @@ $(document).ready(function() {
             dg.datagrid({
                 data: parse_data,
                 pagination: true,
+                rownumbers: false,
                 fitColumns: true,
-                rownumbers: true,
                 singleSelect: true,
                 columns: [
                     [{
@@ -98,6 +98,24 @@ $(document).ready(function() {
                 ],
                 onLoadSuccess: function() {
                     dg.datagrid('enableFilter');
+                },
+                onDblClickRow : function(index,row) {
+                    $('#e_no_faktur').textbox('setValue', 'Yoooo');
+                    $('#e_dtjth_tempo').textbox();
+                    $('#e_dtgudang').combobox();
+                    $('#e_total').numberbox();
+                    $('#e_dtcustomer').combobox();
+                    $('#e_diskonpersen').numberbox();
+                    $('#e_diskonrp').numberbox();
+                    $('#e_dtmobil').combobox();
+                    $('#e_dttanggal').datebox();
+                    $('#e_salesman').combobox();
+                    $('#e_grandtotal').numberbox();
+                    $('#e_status1').radiobutton();
+                    $('#e_status1').radiobutton();
+                    $('#e_keterangan').textbox();
+                    $('#e_dttipe').textbox();
+                    $('#win_edit').window('open');
                 },
                 onClickRow: function(rowIndex, rowData) {
                     $.ajax({

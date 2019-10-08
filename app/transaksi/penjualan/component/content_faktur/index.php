@@ -10,6 +10,10 @@
     <div id="panel_insert"></div>
 </div>
 
+<div id="win_edit" title="Edit Transaksi Penjualan">
+    <div id="panel_edit"></div>
+</div>
+
 <div id="win_retrieve" title="Retrieve Period">
     <div id="panel_retrieve"></div>
 </div>

@@ -4,24 +4,18 @@
  */
 spl_autoload_register(function ($class_name) {
     $php_self_exp = explode('/', $_SERVER['PHP_SELF']);
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/'.$php_self_exp[1].'/config/system/' . $class_name . '.php';
+    include($_SERVER['DOCUMENT_ROOT'] . '/'.$php_self_exp[1].'/config/system/' . $class_name . '.php');
 });
 
 /**
- * Deklarasi query builder
- * Yang tersedia : 1) Codeigniter Query Builder, DOC : https://codeigniter.com/user_guide/database/query_builder.html
- *                 2) Illuminate Eloquent, DOC : https://laravel.com/docs/5.2/queries
- *
- * Contoh script : 1) $codeigniter::query()->get('nama_tabel')->result();
- *                 2) $eloquent::query()->table('nama_tabel')->get();
- *
- * Info          : Query builder bisa digunakan keduanya atau salah satu, sesuai kebutuhan
+ * Path : root_path/config/SQLAnywhere
  */
-//$codeigniter = new Codeigniter();
-$eloquent = new Eloquent();
+$db = new SQLAnywhere();
 
 /**
  * Proses CRUD
+ * Contoh : $db->get('sql_script', 'json_condition', 'result_type')
+ *
  * Disarankan untuk menggunakan htmlspecialchars() setiap request POST/GET AJAX,
  * DOC : https://www.php.net/manual/en/function.htmlspecialchars.php
  */
@@ -65,29 +59,32 @@ $keterangan = addslashes($_REQUEST['keterangan']);
 $hpp        = addslashes($_REQUEST['hpp']);
 $profit     = addslashes($_REQUEST['profit']);
 
-$datum = [
-    'no_faktur' => $no_faktur,
-    'gudang' => $gudang,
-    'cust_id' => $customer,
-    'tanggal' => $tanggal,
-    'kendaraan' => $mobil,
-    'sales_id' => $salesman,
-    'status' => $status,
-    'kode_tipe' => $kode_tipe,
-    'jth_tempo' => $tgl_jth_tempo,
-    'total' => $total,
-    'discountp' => $dtdiskonpersen,
-    'discountn' => $dtdiskonrp,
-    'grandtotal' => $grandtotal,
-    'ket' => $keterangan,
-    'tipe' => 'J',
-    'issuedby' => 'fauzan',
-    'flag_hrgtipe' => '1',
-    'profit' => $profit,
-    'hpp' => $hpp
-];
+$sql = "insert into master_jual(no_faktur,gudang,cust_id,tanggal,kendaraan,sales_id,status,kode_tipe,jth_tempo,total,discountp,discountn,grandtotal,ket,tipe,issuedby,flag_hrgtipe,profit,hpp) values('$no_faktur','$gudang','$customer','$tanggal','$mobil','$salesman','$status','$kode_tipe','$tgl_jth_tempo','$total','$dtdiskonpersen','$dtdiskonrp','$grandtotal','$keterangan','J','fauzan','1','$profit','$hpp')";
 
-$sql_insert = $eloquent->query()->table('master_jual')->insert($datum);
+$sql_insert = $db->insert($sql, true);
 
-print json_encode($datum);
+if ($sql_insert) {
+    echo json_encode(
+        array(
+            'no_faktur'     => $no_faktur,
+            'gudang'        => $gudang,
+            'customer'      => $customer,
+            'tanggal'       => $dttanggal,
+            'mobil'         => $mobil,
+            'salesman'      => $salesman,
+            'status'        => $status,
+            'kode_tipe'     => $kode_tipe,
+            'tgl_jth_tempo' => $dttgl_jth_tempo,
+            'total'         => $total,
+            'diskonpersen'  => $diskonpersen,
+            'diskonrp'      => $diskonrp,
+            'grandtotal'    => $grandtotal,
+            'keterangan'    => $keterangan,
+            'hpp'           => $hpp,
+            'profit'        => $profit
+        )
+    );
+} else {
+    echo json_encode(array('errorMsg'=>'Some errors occured.'));
+}
 ?>

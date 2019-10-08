@@ -4,7 +4,7 @@ $(document).ready(function () {
     var component_location = 'app/transaksi/penjualan';
     var editIndex = undefined;
     var vno = 1;
-    var dg_penjualan = $('#dg_penjualan');
+    var dg_penjualan = $('#e_dg_penjualan');
 
     /**
      * Konfigurasi datagrid dg_penjualan
@@ -17,7 +17,7 @@ $(document).ready(function () {
         rownumbers: true,
         toolbar: [
             {
-                id: 'btn_insert_dg',
+                id: 'e_btn_insert_dg',
                 text: 'Insert Detail',
                 disabled: true,
                 iconCls: 'icon-add',
@@ -27,7 +27,7 @@ $(document).ready(function () {
                 }
             },
             {
-                id: 'btn_delete_dg',
+                id: 'e_btn_delete_dg',
                 text: 'Delete Detail',
                 disabled: true,
                 iconCls: 'icon-remove',
@@ -37,7 +37,7 @@ $(document).ready(function () {
                 }
             },
             {
-                id: 'btn_save_dg',
+                id: 'e_btn_save_dg',
                 text: 'Save',
                 iconCls: 'icon-save',
                 disabled: true,
@@ -47,7 +47,7 @@ $(document).ready(function () {
                 }
             },
             {
-                id: 'btn_reject_dg',
+                id: 'e_btn_reject_dg',
                 text: 'Reject',
                 iconCls: 'icon-undo',
                 disabled: true,
@@ -57,7 +57,7 @@ $(document).ready(function () {
                 }
             },
             {
-                id: 'btn_search_dg',
+                id: 'e_btn_search_dg',
                 text: 'Search',
                 iconCls: 'icon-search',
                 disabled: true,
@@ -116,12 +116,12 @@ $(document).ready(function () {
                                     url: component_location + '/crud/read/get_data_barang.php',
                                     method: 'post',
                                     data: {
-                                        'tipe_harga': $('#dt_kode_tipe').val(),
+                                        'tipe_harga': $('#e_dt_kode_tipe').val(),
                                         'id_barang': value.barang
                                     },
                                     success: function (parsing_data) {
                                         var data = JSON.parse(parsing_data);
-                                        var dg = $('#dg_penjualan');
+                                        var dg = $('#e_dg_penjualan');
                                         var row = dg.datagrid('getSelected');
                                         var rowIndex = dg.datagrid('getRowIndex', row);
                                         var ed1 = dg.datagrid('getEditor', {
@@ -311,9 +311,9 @@ $(document).ready(function () {
         onClickCell: function (index, field, value) {
             if (editIndex != index) {
                 if (endEditing()) {
-                    $('#dg_penjualan').datagrid('selectRow', index)
+                    $('#e_dg_penjualan').datagrid('selectRow', index)
                         .datagrid('beginEdit', index);
-                    var ed = $('#dg_penjualan').datagrid('getEditor', {
+                    var ed = $('#e_dg_penjualan').datagrid('getEditor', {
                         index: index,
                         field: field
                     });
@@ -323,7 +323,7 @@ $(document).ready(function () {
                     editIndex = index;
                 } else {
                     setTimeout(function () {
-                        $('#dg_penjualan').datagrid('selectRow', editIndex);
+                        $('#e_dg_penjualan').datagrid('selectRow', editIndex);
                     }, 0);
                 }
             }
@@ -336,7 +336,7 @@ $(document).ready(function () {
             row.productname = $(ed.target).combobox('getText');
         },
         onBeginEdit: function (rowIndex) {
-            var dg_tbl = $('#dg_penjualan');
+            var dg_tbl = $('#e_dg_penjualan');
             var editors = dg_tbl.datagrid('getEditors', rowIndex);
             var jumlah_barang = $(editors[0].target); // jumlah
             var harga_dasar = $(editors[5].target); // harga jual
@@ -395,7 +395,7 @@ $(document).ready(function () {
             });
         },
         onAfterEdit: function (index, row, changes) {
-            var data = $('#dg_penjualan').datagrid('getData');
+            var data = $('#e_dg_penjualan').datagrid('getData');
             var rows = data.rows;
             var sum = 0;
             var hpp = 0;
@@ -414,10 +414,10 @@ $(document).ready(function () {
                 prf += parseInt(rows[i].data_profit);
             }
 
-            $('#total').numberbox('setValue', sum);
-            $('#grandtotal').numberbox('setValue', sum);
-            $('#dthpp').val(hpp);
-            $('#dtprofit').val(prf);
+            $('#e_total').numberbox('setValue', sum);
+            $('#e_grandtotal').numberbox('setValue', sum);
+            $('#e_dthpp').val(hpp);
+            $('#e_dtprofit').val(prf);
         }
     });
 
@@ -431,11 +431,11 @@ $(document).ready(function () {
             url: component_location + '/component/content_faktur/ajax/window/win_pencarian_barang.php',
             method: 'post',
             data: {
-                'dt_kode_tipe': $('#dt_kode_tipe').val()
+                'dt_kode_tipe': $('#e_dt_kode_tipe').val()
             },
             success: function (parsing_data) {
-                $('#wsearch').html(parsing_data);
-                $('#wsearch').window('open');
+                $('#e_wsearch').html(parsing_data);
+                $('#e_wsearch').window('open');
             }
         });
     }
@@ -444,8 +444,8 @@ $(document).ready(function () {
         if (editIndex == undefined) {
             return true
         }
-        if ($('#dg_penjualan').datagrid('validateRow', editIndex)) {
-            $('#dg_penjualan').datagrid('endEdit', editIndex);
+        if ($('#e_dg_penjualan').datagrid('validateRow', editIndex)) {
+            $('#e_dg_penjualan').datagrid('endEdit', editIndex);
             editIndex = undefined;
             return true;
         } else {
@@ -455,11 +455,11 @@ $(document).ready(function () {
 
     function append() {
         if (endEditing()) {
-            $('#dg_penjualan').datagrid('appendRow', {
+            $('#e_dg_penjualan').datagrid('appendRow', {
                 dtno: vno++
             });
-            editIndex = $('#dg_penjualan').datagrid('getRows').length - 1;
-            $('#dg_penjualan').datagrid('selectRow', editIndex)
+            editIndex = $('#e_dg_penjualan').datagrid('getRows').length - 1;
+            $('#e_dg_penjualan').datagrid('selectRow', editIndex)
                 .datagrid('beginEdit', editIndex);
         }
     }
@@ -468,18 +468,18 @@ $(document).ready(function () {
         if (editIndex == undefined) {
             return
         }
-        $('#dg_penjualan').datagrid('cancelEdit', editIndex)
+        $('#e_dg_penjualan').datagrid('cancelEdit', editIndex)
             .datagrid('deleteRow', editIndex);
         editIndex = undefined;
     }
 
     function acceptit() {
         if (endEditing()) {
-            $('#dg_penjualan').datagrid('acceptChanges');
-            var data = $('#dg_penjualan').datagrid('getData');
+            $('#e_dg_penjualan').datagrid('acceptChanges');
+            var data = $('#e_dg_penjualan').datagrid('getData');
             var rows = data.rows;
 
-            $('#formid').form('submit', {
+            $('#form_edit').form('submit', {
                 url: component_location + '/crud/create/save_hdr_penjualan.php',
                 onSubmit: function () {
                     return $(this).form('validate');
@@ -494,8 +494,8 @@ $(document).ready(function () {
                         url: component_location + '/crud/create/save_dtl_penjualan.php',
                         data: {
                             'params': rows,
-                            'no_faktur': $('#no_faktur').textbox('getValue'),
-                            'gudang': $('#dtgudang').combobox('getValue')
+                            'no_faktur': $('#e_no_faktur').textbox('getValue'),
+                            'gudang': $('#e_dtgudang').combobox('getValue')
                         },
                         success: function (data) {
                             console.log('ini isi datanya =', data);
@@ -507,12 +507,12 @@ $(document).ready(function () {
     }
 
     function reject() {
-        $('#dg_penjualan').datagrid('rejectChanges');
+        $('#e_dg_penjualan').datagrid('rejectChanges');
         editIndex = undefined;
     }
 
     function getChanges() {
-        var rows = $('#dg_penjualan').datagrid('getChanges');
+        var rows = $('#e_dg_penjualan').datagrid('getChanges');
         alert(rows.length + ' rows are changed!');
     }
 

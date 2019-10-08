@@ -38,6 +38,21 @@ $(document).ready(function() {
             alert("Edit");
         }
     });
+    $('#win_edit').window({
+        top:40,
+        width:1366,
+        height:590,
+        fit: false,
+        modal: false,
+        closed: true,
+        iconCls: 'icon-edit',
+        collapsible: false,
+        minimizable: false,
+        maximizable: true
+    });
+    $('#panel_edit').panel({
+        href: component_location+'/edit_penjualan.php'
+    });
 
     /**
      * Delete config

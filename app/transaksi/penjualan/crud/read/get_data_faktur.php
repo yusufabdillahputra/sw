@@ -22,17 +22,17 @@ $db = new SQLAnywhere();
 
 $sql = "declare @is_faktur int, @is_blnthn text, @gs_comp int
 
-select @gs_comp = max(comp_id) from master_jual
-select @is_faktur = max(substring(no_faktur,3,4)) from master_jual
+select @gs_comp = kode_comp from company_user where kode_user = 'fauzan'
 select @is_blnthn = dateformat(NOW(), 'mmyy')
+select @is_faktur = max(substring(no_faktur,3,4)) from master_jual where right(left(no_faktur,10),4) = @is_blnthn and comp_id = @gs_comp
 
-select @gs_comp as dt_comp_id, @is_faktur as dt_faktur, @is_blnthn as dt_blnthn";
+select @gs_comp as dt_comp_id, CASE WHEN @is_faktur IS NULL THEN 0 END as dt_faktur, @is_blnthn as dt_blnthn";
 $fetch = $db->get($sql, false);
 
 foreach ($fetch as $row) {
     $result = array(
         'comp_id' => $row['dt_comp_id'],
-        'faktur' => $row['dt_faktur'],
+        'faktur' => sprintf('%05s',$row['dt_faktur']+1),
         'blnthn' => $row['dt_blnthn']
     );
 }

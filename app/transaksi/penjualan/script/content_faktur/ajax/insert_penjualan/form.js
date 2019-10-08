@@ -65,10 +65,30 @@ $(document).ready(function () {
         labelWidth: 100,
         labelPosition: 'before',
         width: 600,
+        required: true,
         valueField: 'id',
         textField: 'nama',
         url: component_location + '/crud/read/get_customer.php',
         onSelect: function (rec) {
+            $.ajax({
+                type: 'post',
+                url: component_location + '/crud/validasi/valid_customer.php',
+                data: {
+                    'customer_id': rec.id
+                },
+                success: function (parsing_data) {
+                    var data = JSON.parse(parsing_data);
+                    if (data.status == true) {
+                        $.messager.alert({
+                            title: 'Peringatan',
+                            icon: 'info',
+                            msg: data.message
+                        });
+                    }
+                }
+            });
+
+
             $('#dttipe').textbox('setValue', rec.nama_tipe);
             $('#dtjth_tempo').textbox('setValue', rec.tgl_jth_tempo);
             $('#dttanggal').datebox('setValue', rec.tgl_transaksi);
@@ -108,12 +128,10 @@ $(document).ready(function () {
                     var dt_comp = vdata.comp_id;
                     var dt_blnthn = vdata.blnthn;
                     var dt_faktur = vdata.faktur;
-                    dt_faktur++;
 
-                    var vfaktur = '000' + dt_faktur;
                     var dt_gudang = $('#dtgudang').combobox('getValue');
 
-                    var no_faktur = dt_comp + '/' + vfaktur + '/' + dt_blnthn + '/' + dt_gudang + '/JB';
+                    var no_faktur = dt_comp + '/' + dt_faktur + '/' + dt_blnthn + '/' + dt_gudang + '/JB';
 
                     console.log('ini auto faktur', no_faktur);
                     $('#no_faktur').textbox('setValue', no_faktur);
@@ -151,18 +169,63 @@ $(document).ready(function () {
             var y = date.getFullYear();
             var m = date.getMonth() + 1;
             var d = date.getDate();
-            return y + '-' + (m < 10 ? ('0' + m) : m) + '-' + (d < 10 ? ('0' + d) : d);
+            return m + '/' + d + '/' + y;
         },
         parser: function (s) {
-            if (!s) return new Date();
-            var ss = (s.split('-'));
-            var y = parseInt(ss[0], 10);
-            var m = parseInt(ss[1], 10);
-            var d = parseInt(ss[2], 10);
-            if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
-                return new Date(d, m - 1, y);
+            var t = Date.parse(s);
+            if (!isNaN(t)) {
+                return new Date(t);
             } else {
                 return new Date();
+            }
+        },
+        onSelect: function (date_input) {
+            /**
+             * Contoh : 01/10/2019
+             * @type {string}
+             */
+            var date = new Date();
+            var date_sekarang = Date.parse((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear());
+            var tgl_input = Date.parse((date_input.getMonth() + 1) + "/" + date_input.getDate() + "/" + date_input.getFullYear());
+
+            if (tgl_input > date_sekarang) {
+                $.ajax({
+                    type: 'post',
+                    url: component_location + '/crud/validasi/valid_tgl_maju.php',
+                    data: {
+                        'tgl': (date_input.getMonth() + 1) + "/" + date_input.getDate() + "/" + date_input.getFullYear()
+                    },
+                    success: function (parsing_data) {
+                        var data = JSON.parse(parsing_data);
+                        if (data.code == 401) {
+                            $.messager.alert({
+                                title: 'Peringatan',
+                                icon: 'info',
+                                msg: data.message
+                            });
+                            $('#dttanggal').datebox('setValue', null);
+                        }
+                    }
+                });
+            } if (tgl_input < date_sekarang) {
+                $.ajax({
+                    type: 'post',
+                    url: component_location + '/crud/validasi/valid_tgl_mundur.php',
+                    data: {
+                        'tgl': (date_input.getMonth() + 1) + "/" + date_input.getDate() + "/" + date_input.getFullYear()
+                    },
+                    success: function (parsing_data) {
+                        var data = JSON.parse(parsing_data);
+                        if (data.code == 401) {
+                            $.messager.alert({
+                                title: 'Peringatan',
+                                icon: 'info',
+                                msg: data.message
+                            });
+                            $('#dttanggal').datebox('setValue', null);
+                        }
+                    }
+                });
             }
         }
     });
@@ -200,6 +263,7 @@ $(document).ready(function () {
         labelWidth: 100,
         labelPosition: 'before',
         width: 600,
+        required: true,
         valueField: 'id',
         textField: 'nama',
         url: component_location + '/crud/read/get_data_sales.php'
