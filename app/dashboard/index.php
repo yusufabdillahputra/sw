@@ -4,13 +4,14 @@
  */
 spl_autoload_register(function ($class_name) {
     $php_self_exp = explode('/', $_SERVER['PHP_SELF']);
-    include($_SERVER['DOCUMENT_ROOT'] . '/' . $php_self_exp[1] . '/config/system/' . $class_name . '.php');
+    include($_SERVER['DOCUMENT_ROOT'] . '/'.$php_self_exp[1].'/config/system/' . $class_name . '.php');
 });
 
 /**
  * Path : root_path/config/SQLAnywhere
  */
 $db = new SQLAnywhere();
+$library = new Library();
 
 /**
  * Proses CRUD
@@ -19,38 +20,33 @@ $db = new SQLAnywhere();
  * Disarankan untuk menggunakan htmlspecialchars() setiap request POST/GET AJAX,
  * DOC : https://www.php.net/manual/en/function.htmlspecialchars.php
  */
-$date1 = Date('Y-d-m', strtotime('01/10/2019'));
-$date2 = Date('Y-m-d');
-$date3 = Date('Y-m-d', strtotime($date2 . "+3 days"));
+$sql = "select simpan from autority where user_id = 'fauzan'";
 
-echo $date3 . " dan " . $date1;
+$result = $db->first($sql, false);
+$simpan = $result['simpan'];
 
-$sql = "select fkt_mundur, fkt_maju from autority where user_id = 'fauzan'";
+if ($simpan == 'N') {
+    $cekPlafon = $library->fCekPlafoncust('001');
+	if ($cekPlafon == 5) {
+		echo $MessageBox = "Anda tidak mempunyai otoritas untuk membuat faktur over plafon.";
+	} else {
+		$ll_rc2 = 2;
 
-$result = $db->get($sql, false);
+		$jumlah = array('2','1');
+		$harga_dasar = array('2000','15500');
+		$subtotal = array('2000','10000');
+		$nama_barang = array('gelas','baskom testing');
 
-foreach ($result as $value) {
-    $fkt_mundur = $value['fkt_mundur'];
-    $fkt_maju = $value['fkt_maju'];
+		for ($i=0; $i < $ll_rc2; $i++) {
+			$ldb_jumlah   = $jumlah[$i];
+			$ldb_hrgdasar = $harga_dasar[$i];
+			$ldb_hrgsubtotal = $subtotal[$i];
+			$ldb_subtot_hrgdasar = $ldb_hrgdasar * $ldb_jumlah;
+		}
+		if ($ldb_hrgsubtotal <= $ldb_subtot_hrgdasar) {
+			$ls_namabrg = $nama_barang[0];
+			echo $MessageBox = "Harga jual barang <b>".strtoupper($ls_namabrg)."</b> lebih kecil dari harga dasar.\n Anda tidak mempunyai hak akses untuk menyimpan transaksi penjualan ini.";
+		}
+	}
 }
 
-if ($fkt_mundur == 'N' && $date1 < $date2) {
-    $pesan1 = "Anda tidak mempunyai otoritas untuk membuat faktur mundur tanggal.";
-} else {
-    $pesan1 = "";
-}
-
-if ($fkt_maju == 'N' && $date1 >= $date3) {
-    $pesan2 = "Anda tidak berhak untuk membuka faktur H+3.";
-} else {
-    $pesan2 = "";
-}
-
-$status = array(
-    'code' => 200,
-    'message1' => $pesan1,
-    'message2' => $pesan2,
-    'sql' => $result
-);
-
-print_r($status);

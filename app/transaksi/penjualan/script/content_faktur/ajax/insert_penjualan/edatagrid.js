@@ -81,232 +81,232 @@ $(document).ready(function () {
                     }
                 }
             },
-                {
-                    title: 'Satuan',
-                    field: 'satuan',
-                    align: 'center',
-                    halign: 'center',
-                    width: 60,
-                    editor: {
-                        type: 'textbox',
-                        options: {
-                            readonly: true
-                        }
+            {
+                title: 'Satuan',
+                field: 'satuan',
+                align: 'center',
+                halign: 'center',
+                width: 60,
+                editor: {
+                    type: 'textbox',
+                    options: {
+                        readonly: true
                     }
-                },
-                {
-                    title: 'Barang',
-                    field: 'barang',
-                    align: 'center',
-                    halign: 'center',
-                    width: 200,
-                    formatter: function (value, row) {
-                        return row.productname;
-                    },
-                    editor: {
-                        type: 'combobox',
-                        options: {
-                            valueField: 'barang',
-                            textField: 'productname',
-                            method: 'get',
-                            url: component_location + '/crud/read/get_barang.php',
-                            required: true,
-                            onSelect: function (value) {
-                                $.ajax({
-                                    url: component_location + '/crud/read/get_data_barang.php',
-                                    method: 'post',
-                                    data: {
-                                        'tipe_harga': $('#dt_kode_tipe').val(),
-                                        'id_barang': value.barang
-                                    },
-                                    success: function (parsing_data) {
-                                        var data = JSON.parse(parsing_data);
-                                        var dg = $('#dg_penjualan');
-                                        var row = dg.datagrid('getSelected');
-                                        var rowIndex = dg.datagrid('getRowIndex', row);
-                                        var ed1 = dg.datagrid('getEditor', {
-                                            index: rowIndex,
-                                            field: 'satuan'
-                                        });
-                                        var ed2 = dg.datagrid('getEditor', {
-                                            index: rowIndex,
-                                            field: 'harga_beli'
-                                        });
-                                        var ed3 = dg.datagrid('getEditor', {
-                                            index: rowIndex,
-                                            field: 'harga_dasar'
-                                        });
-                                        var ed4 = dg.datagrid('getEditor', {
-                                            index: rowIndex,
-                                            field: 'harga_jual'
-                                        });
-                                        var ed5 = dg.datagrid('getEditor', {
-                                            index: rowIndex,
-                                            field: 'spesifikasi'
-                                        });
-                                        var ed6 = dg.datagrid('getEditor', {
-                                            index: rowIndex,
-                                            field: 'idbarang'
-                                        });
-
-                                        if (data.harga_jual == null) {
-                                            alert('Harga jual barang = 0 untuk Tipe Harga ' + data.tipe_harga + ' . Anda belum setting harga jual di master barang.');
-                                            $(ed1.target).textbox('readonly', true);
-                                            $(ed2.target).numberbox('readonly', true);
-                                            $(ed3.target).numberbox('readonly', true);
-                                            $(ed4.target).numberbox('readonly', false);
-                                            $(ed5.target).textbox('readonly', true);
-                                            $(ed6.target).textbox('readonly', true);
-                                        } else {
-                                            $(ed1.target).textbox('setValue', data.satuan_barang);
-                                            $(ed2.target).numberbox('setValue', data.harga_beli);
-                                            $(ed3.target).numberbox('setValue', data.harga_dasar);
-                                            $(ed4.target).numberbox('setValue', data.harga_jual);
-                                            $(ed5.target).textbox('setValue', data.spesifikasi);
-                                            $(ed6.target).textbox('setValue', data.id_barang);
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    }
-                },
-                {
-                    title: 'Spesifikasi',
-                    field: 'spesifikasi',
-                    align: 'center',
-                    halign: 'center',
-                    width: 120,
-                    editor: {
-                        type: 'textbox',
-                        options: {
-                            readonly: true
-                        }
-                    }
-                },
-                {
-                    title: 'Harga Beli',
-                    field: 'harga_beli',
-                    align: 'right',
-                    halign: 'center',
-                    width: 100,
-                    editor: {
-                        type: 'numberbox',
-                        options: {
-                            precision: 2,
-                            readonly: true
-                        }
-                    }
-                },
-                {
-                    title: 'Harga Dasar',
-                    field: 'harga_dasar',
-                    halign: 'center',
-                    width: 100,
-                    align: 'right',
-                    editor: {
-                        type: 'numberbox',
-                        options: {
-                            precision: 2,
-                            readonly: true
-                        }
-                    }
-                },
-                {
-                    title: 'Harga Jual',
-                    field: 'harga_jual',
-                    halign: 'center',
-                    width: 100,
-                    align: 'right',
-                    editor: {
-                        type: 'numberbox',
-                        options: {
-                            precision: 2
-                        }
-                    }
-                },
-                {
-                    title: 'Disc %',
-                    field: 'discpersen',
-                    halign: 'center',
-                    width: 100,
-                    editor: {
-                        type: 'numberbox',
-                        options: {
-                            precision: 2
-                        }
-                    }
-                },
-                {
-                    title: 'Disc Rp.',
-                    field: 'discrupiah',
-                    align: 'right',
-                    halign: 'center',
-                    width: 100,
-                    editor: {
-                        type: 'numberbox',
-                        options: {
-                            precision: 2
-                        }
-                    }
-                },
-                {
-                    title: 'Sub Total',
-                    field: 'subtotal',
-                    align: 'right',
-                    halign: 'center',
-                    width: 150,
-                    editor: {
-                        type: 'numberbox',
-                        options: {
-                            precision: 2,
-                            readonly: true
-                        }
-                    }
-                },
-                {
-                    title: 'Colly',
-                    field: 'colly',
-                    halign: 'center',
-                    width: 50,
-                    align: 'right',
-                    editor: 'textbox'
-                },
-                {
-                    title: 'Ket',
-                    field: 'ket',
-                    halign: 'center',
-                    width: 50,
-                    align: 'right',
-                    editor: 'textbox'
-                },
-                {
-                    title: 'Ket SO',
-                    field: 'ket_so',
-                    halign: 'center',
-                    width: 100,
-                    align: 'right',
-                    editor: 'textbox'
-                },
-                {
-                    title: '',
-                    field: 'data_profit',
-                    width: 5,
-                    editor: {
-                        type: 'numberbox',
-                        options: {
-                            precision: 0,
-                            readonly: true
-                        }
-                    }
-                },
-                {
-                    title: '',
-                    field: 'idbarang',
-                    width: 5,
-                    editor: 'textbox'
                 }
-            ]
+            },
+            {
+                title: 'Barang',
+                field: 'barang',
+                align: 'center',
+                halign: 'center',
+                width: 200,
+                formatter: function (value, row) {
+                    return row.productname;
+                },
+                editor: {
+                    type: 'combobox',
+                    options: {
+                        valueField: 'barang',
+                        textField: 'productname',
+                        method: 'get',
+                        url: component_location + '/crud/read/get_barang.php',
+                        required: true,
+                        onSelect: function (value) {
+                            $.ajax({
+                                url: component_location + '/crud/read/get_data_barang.php',
+                                method: 'post',
+                                data: {
+                                    'tipe_harga': $('#dt_kode_tipe').val(),
+                                    'id_barang': value.barang
+                                },
+                                success: function (parsing_data) {
+                                    var data = JSON.parse(parsing_data);
+                                    var dg = $('#dg_penjualan');
+                                    var row = dg.datagrid('getSelected');
+                                    var rowIndex = dg.datagrid('getRowIndex', row);
+                                    var ed1 = dg.datagrid('getEditor', {
+                                        index: rowIndex,
+                                        field: 'satuan'
+                                    });
+                                    var ed2 = dg.datagrid('getEditor', {
+                                        index: rowIndex,
+                                        field: 'harga_beli'
+                                    });
+                                    var ed3 = dg.datagrid('getEditor', {
+                                        index: rowIndex,
+                                        field: 'harga_dasar'
+                                    });
+                                    var ed4 = dg.datagrid('getEditor', {
+                                        index: rowIndex,
+                                        field: 'harga_jual'
+                                    });
+                                    var ed5 = dg.datagrid('getEditor', {
+                                        index: rowIndex,
+                                        field: 'spesifikasi'
+                                    });
+                                    var ed6 = dg.datagrid('getEditor', {
+                                        index: rowIndex,
+                                        field: 'idbarang'
+                                    });
+
+                                    if (data.harga_jual == null) {
+                                        alert('Harga jual barang = 0 untuk Tipe Harga ' + data.tipe_harga + ' . Anda belum setting harga jual di master barang.');
+                                        $(ed1.target).textbox('readonly', true);
+                                        $(ed2.target).numberbox('readonly', true);
+                                        $(ed3.target).numberbox('readonly', true);
+                                        $(ed4.target).numberbox('readonly', false);
+                                        $(ed5.target).textbox('readonly', true);
+                                        $(ed6.target).textbox('readonly', true);
+                                    } else {
+                                        $(ed1.target).textbox('setValue', data.satuan_barang);
+                                        $(ed2.target).numberbox('setValue', data.harga_beli);
+                                        $(ed3.target).numberbox('setValue', data.harga_dasar);
+                                        $(ed4.target).numberbox('setValue', data.harga_jual);
+                                        $(ed5.target).textbox('setValue', data.spesifikasi);
+                                        $(ed6.target).textbox('setValue', data.id_barang);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            },
+            {
+                title: 'Spesifikasi',
+                field: 'spesifikasi',
+                align: 'center',
+                halign: 'center',
+                width: 120,
+                editor: {
+                    type: 'textbox',
+                    options: {
+                        readonly: true
+                    }
+                }
+            },
+            {
+                title: 'Harga Beli',
+                field: 'harga_beli',
+                align: 'right',
+                halign: 'center',
+                width: 100,
+                editor: {
+                    type: 'numberbox',
+                    options: {
+                        precision: 2,
+                        readonly: true
+                    }
+                }
+            },
+            {
+                title: 'Harga Dasar',
+                field: 'harga_dasar',
+                halign: 'center',
+                width: 100,
+                align: 'right',
+                editor: {
+                    type: 'numberbox',
+                    options: {
+                        precision: 2,
+                        readonly: true
+                    }
+                }
+            },
+            {
+                title: 'Harga Jual',
+                field: 'harga_jual',
+                halign: 'center',
+                width: 100,
+                align: 'right',
+                editor: {
+                    type: 'numberbox',
+                    options: {
+                        precision: 2
+                    }
+                }
+            },
+            {
+                title: 'Disc %',
+                field: 'discpersen',
+                halign: 'center',
+                width: 100,
+                editor: {
+                    type: 'numberbox',
+                    options: {
+                        precision: 2
+                    }
+                }
+            },
+            {
+                title: 'Disc Rp.',
+                field: 'discrupiah',
+                align: 'right',
+                halign: 'center',
+                width: 100,
+                editor: {
+                    type: 'numberbox',
+                    options: {
+                        precision: 2
+                    }
+                }
+            },
+            {
+                title: 'Sub Total',
+                field: 'subtotal',
+                align: 'right',
+                halign: 'center',
+                width: 150,
+                editor: {
+                    type: 'numberbox',
+                    options: {
+                        precision: 2,
+                        readonly: true
+                    }
+                }
+            },
+            {
+                title: 'Colly',
+                field: 'colly',
+                halign: 'center',
+                width: 50,
+                align: 'right',
+                editor: 'textbox'
+            },
+            {
+                title: 'Ket',
+                field: 'ket',
+                halign: 'center',
+                width: 50,
+                align: 'right',
+                editor: 'textbox'
+            },
+            {
+                title: 'Ket SO',
+                field: 'ket_so',
+                halign: 'center',
+                width: 100,
+                align: 'right',
+                editor: 'textbox'
+            },
+            {
+                title: '',
+                field: 'data_profit',
+                width: 5,
+                editor: {
+                    type: 'numberbox',
+                    options: {
+                        precision: 0,
+                        readonly: true
+                    }
+                }
+            },
+            {
+                title: '',
+                field: 'idbarang',
+                width: 5,
+                editor: 'textbox'
+            }
+        ]
         ],
         onClickCell: function (index, field, value) {
             if (editIndex != index) {
@@ -339,6 +339,7 @@ $(document).ready(function () {
             var dg_tbl = $('#dg_penjualan');
             var editors = dg_tbl.datagrid('getEditors', rowIndex);
             var jumlah_barang = $(editors[0].target); // jumlah
+            var harga_beli = $(editors[4].target); // harga jual
             var harga_dasar = $(editors[5].target); // harga jual
             var harga_jual = $(editors[6].target); // harga jual
 
@@ -347,12 +348,7 @@ $(document).ready(function () {
 
             var sub_total = $(editors[9].target); // subtotal
             var profit = $(editors[13].target); // profit
-
-            var sum_disk_subtotal = {
-                diskon_persen: 0,
-                diskon_rupiah: 0
-            };
-
+            
             jumlah_barang.numberbox({
                 onChange: function (newValue, oldValue) {
                     var jumlah = newValue * harga_jual.numberbox('getValue');
@@ -361,36 +357,55 @@ $(document).ready(function () {
                     var rumus_profit = jumlah - harga_dasar.numberbox('getValue');
                     profit.numberbox('setValue', rumus_profit);
                 }
-            }),
-                diskon_persen.numberbox({
-                    onChange: function (newValue, oldValue) {
-                        var index_jumlah = jumlah_barang.numberbox('getValue');
-                        var index_harga_jual = harga_jual.numberbox('getValue');
-                        var index_harga_dasar = harga_dasar.numberbox('getValue');
-                        var total_jumlah_harga = index_jumlah * index_harga_jual;
-                        var jumlah = (newValue / 100) * total_jumlah_harga;
-                        var old_sub_total = total_jumlah_harga;
-                        var total = old_sub_total - (jumlah + diskon_rupiah.numberbox('getValue'));
-                        sub_total.numberbox('setValue', total);
-
-                        var rumus_profit = total - index_harga_dasar;
-                        profit.numberbox('setValue', rumus_profit);
-                    }
-                });
-            diskon_rupiah.numberbox({
+            })
+            diskon_persen.numberbox({
                 onChange: function (newValue, oldValue) {
                     var index_jumlah = jumlah_barang.numberbox('getValue');
                     var index_harga_jual = harga_jual.numberbox('getValue');
                     var index_harga_dasar = harga_dasar.numberbox('getValue');
                     var total_jumlah_harga = index_jumlah * index_harga_jual;
-                    var jumlah = total_jumlah_harga - newValue;
+                    var jumlah = (newValue / 100) * total_jumlah_harga;
                     var old_sub_total = total_jumlah_harga;
-                    var convert_persen = (diskon_persen.numberbox('getValue') / 100) * total_jumlah_harga;
-                    var total = (jumlah + convert_persen) - old_sub_total;
+                    var total = old_sub_total - (jumlah + diskon_rupiah.numberbox('getValue'));
                     sub_total.numberbox('setValue', total);
 
                     var rumus_profit = total - index_harga_dasar;
                     profit.numberbox('setValue', rumus_profit);
+                }
+            });
+            diskon_rupiah.numberbox({
+                onChange: function (newValue, oldValue) {
+                    var rupiah_input = Number(newValue);
+                    var index_jumlah = jumlah_barang.numberbox('getValue');
+                    var index_harga_jual = harga_jual.numberbox('getValue');
+                    var total_jumlah_harga = index_jumlah * index_harga_jual;
+                    var convert_persen = (diskon_persen.numberbox('getValue') / 100) * total_jumlah_harga;
+                    var total = total_jumlah_harga - (rupiah_input + convert_persen);
+                    sub_total.numberbox('setValue', total);
+
+                    var index_harga_dasar = harga_dasar.numberbox('getValue');
+                    var rumus_profit = total - index_harga_dasar;
+                    profit.numberbox('setValue', rumus_profit);
+                }
+            });
+            harga_jual.numberbox({
+                onChange: function (newValue, oldValue) {
+                    var rupiah_input = Number(newValue);
+                    var val_harga_beli = harga_beli.numberbox('getValue');
+                    var val_harga_dasar = harga_dasar.numberbox('getValue');
+                    if (rupiah_input < val_harga_beli && rupiah_input < val_harga_dasar) {
+                        $.messager.alert({
+                            title: 'Peringatan',
+                            icon: 'info',
+                            msg: 'Harga jual lebih kecil dari harga beli dan harga dasar!<br>Cek kembali harga jualnya.'
+                        });
+                    } else if (rupiah_input < val_harga_beli || rupiah_input < val_harga_dasar) {
+                        $.messager.alert({
+                            title: 'Peringatan',
+                            icon: 'info',
+                            msg: 'Harga jual lebih kecil dari harga beli atau harga dasar!<br>Cek kembali harga jualnya.'
+                        });
+                    }
                 }
             });
         },
@@ -478,17 +493,18 @@ $(document).ready(function () {
             $('#dg_penjualan').datagrid('acceptChanges');
             var data = $('#dg_penjualan').datagrid('getData');
             var rows = data.rows;
+            var id_customer = $('#dtcustomer').combobox('getValue');
 
             $('#formid').form('submit', {
                 url: component_location + '/crud/create/save_hdr_penjualan.php',
                 onSubmit: function () {
                     //return console.log(rows);
-                    return cekIdBarang(rows);
+                    return validasiSubmit(rows, id_customer);
                 },
                 success: function (data) {
                     $.ajax({
-                        async:false,
-                        global:false,
+                        async: false,
+                        global: false,
                         dataType: 'html',
                         method: 'post',
                         url: component_location + '/crud/create/save_dtl_penjualan.php',
@@ -498,7 +514,7 @@ $(document).ready(function () {
                             'gudang': $('#dtgudang').combobox('getValue')
                         },
                         success: function (data) {
-                            console.log('ini isi datanya =', data);
+                            $('#win_insert').window('close');
                         }
                     });
                 }
@@ -506,6 +522,59 @@ $(document).ready(function () {
         }
     }
     
+    function validasiSubmit(rows, id_customer) {
+        var cek_barang = cekIdBarang(rows);
+        var cek_harga_jual = validasiHargaJual(rows, id_customer);
+
+        if (cek_barang == false || cek_harga_jual == false) {
+            return false;
+        } if (cek_barang == true && cek_harga_jual == true) {
+            /**
+             * todo : kalau sudah semua tolong di true kan
+             */
+            return false;
+        }
+    }
+    
+    function validasiHargaJual(rows, id_customer) {
+        var jumlah = [];
+        var harga_dasar = [];
+        var subtotal = [];
+        var nama_barang = [];
+        rows.forEach(function (item, index) {
+            jumlah.push(Number(item.jumlah));
+            harga_dasar.push(Number(item.harga_dasar));
+            subtotal.push(Number(item.subtotal));
+            nama_barang.push(item.productname);
+        });
+
+        $.ajax({
+            method: 'post',
+            url: component_location + '/crud/validasi/valid_harga_jual.php',
+            data: {
+                'll_rc2': rows.length,
+                'jumlah': jumlah,
+                'harga_dasar': harga_dasar,
+                'subtotal': subtotal,
+                'nama_barang': nama_barang,
+                'id_customer' : id_customer
+            },
+            success: function (parsing_data) {
+                var data = JSON.parse(parsing_data);
+                if (data.code !== 200) {
+                    $.messager.alert({
+                        title: 'Peringatan',
+                        icon: 'info',
+                        msg: data.pesan
+                    });
+                    return false;
+                } else if (data.code == 200) {
+                    return true;
+                }
+            }
+        });
+    }
+
     function cekIdBarang(rows) {
         if (rows.length < 1) {
             $.messager.alert({

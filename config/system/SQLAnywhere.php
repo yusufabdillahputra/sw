@@ -2,6 +2,8 @@
 
 class SQLAnywhere extends App {
 
+    protected $connection;
+
     public function __construct()
     {
         parent::__construct();
