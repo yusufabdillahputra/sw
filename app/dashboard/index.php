@@ -11,7 +11,6 @@ spl_autoload_register(function ($class_name) {
  * Path : root_path/config/SQLAnywhere
  */
 $db = new SQLAnywhere();
-$library = new Library();
 
 /**
  * Proses CRUD
@@ -20,33 +19,29 @@ $library = new Library();
  * Disarankan untuk menggunakan htmlspecialchars() setiap request POST/GET AJAX,
  * DOC : https://www.php.net/manual/en/function.htmlspecialchars.php
  */
-$sql = "select simpan from autority where user_id = 'fauzan'";
+$sql = "declare @ldb_piutang DOUBLE, @ldb_plafon DOUBLE, @ls_prioritas TEXT, @li_fkt_outstanding INT, @is_fkt_outstanding TEXT, @is_simpan TEXT
+
+SELECT @ldb_piutang = piutang, @ldb_plafon = plafon, @ls_prioritas = prioritas, @li_fkt_outstanding = fkt_outstanding FROM customer where id = '001'
+SELECT @is_fkt_outstanding = fkt_outstanding, @is_simpan = simpan FROM autority where user_id = 'fauzan'
+
+select @ldb_piutang as ldb_piutang, @ldb_plafon as ldb_plafon, @is_simpan AS is_simpan";
 
 $result = $db->first($sql, false);
-$simpan = $result['simpan'];
 
-if ($simpan == 'N') {
-    $cekPlafon = $library->fCekPlafoncust('001');
-	if ($cekPlafon == 5) {
-		echo $MessageBox = "Anda tidak mempunyai otoritas untuk membuat faktur over plafon.";
-	} else {
-		$ll_rc2 = 2;
+$ldb_total_piutang = $result['ldb_piutang'] + 200000; // 200000 adalah grandtotal dari header
+$ldb_plafon        = $result['ldb_plafon'];
+$is_simpan         = $result['is_simpan'];
+$status            = 'K'; // K = Kredit or T = Tunai --> status pada header insert penjualan
+$MessageBox        = "";
 
-		$jumlah = array('2','1');
-		$harga_dasar = array('2000','15500');
-		$subtotal = array('2000','10000');
-		$nama_barang = array('gelas','baskom testing');
-
-		for ($i=0; $i < $ll_rc2; $i++) {
-			$ldb_jumlah   = $jumlah[$i];
-			$ldb_hrgdasar = $harga_dasar[$i];
-			$ldb_hrgsubtotal = $subtotal[$i];
-			$ldb_subtot_hrgdasar = $ldb_hrgdasar * $ldb_jumlah;
-		}
-		if ($ldb_hrgsubtotal <= $ldb_subtot_hrgdasar) {
-			$ls_namabrg = $nama_barang[0];
-			echo $MessageBox = "Harga jual barang <b>".strtoupper($ls_namabrg)."</b> lebih kecil dari harga dasar.\n Anda tidak mempunyai hak akses untuk menyimpan transaksi penjualan ini.";
+if ($status == 'K') {
+	if ($ldb_total_piutang >= $ldb_plafon) {
+		if ($is_simpan == 'N') {
+			$MessageBox = nl2br("Anda tidak mempunyai otoritas untuk membuat transaksi ini karena\r\npiutang customer telah melewati plafon kredit yang diperbolehkan!\r\nPlafon kredit = ".number_format($ldb_plafon, 2, '.', ',')." \r\nJumlah kredit (termasuk faktur ini) = ".number_format($ldb_total_piutang, 2, '.', ','));
+		} else {
+			$MessageBox = nl2br("Piutang customer telah melewati plafon kredit yang diperbolehkan!\r\nPlafon kredit = ".number_format($ldb_plafon, 2, '.', ',')." \r\nJumlah kredit (termasuk faktur ini) = ".number_format($ldb_total_piutang, 2, '.', ','));
 		}
 	}
 }
 
+print_r($MessageBox);

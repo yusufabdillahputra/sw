@@ -494,12 +494,13 @@ $(document).ready(function () {
             var data = $('#dg_penjualan').datagrid('getData');
             var rows = data.rows;
             var id_customer = $('#dtcustomer').combobox('getValue');
+            var status = $('input[name=status]:checked', '#formid').val();
 
             $('#formid').form('submit', {
                 url: component_location + '/crud/create/save_hdr_penjualan.php',
                 onSubmit: function () {
                     //return console.log(rows);
-                    return validasiSubmit(rows, id_customer);
+                    return validasiSubmit(rows, id_customer, status);
                 },
                 success: function (data) {
                     $.ajax({
@@ -521,19 +522,58 @@ $(document).ready(function () {
             });
         }
     }
-    
-    function validasiSubmit(rows, id_customer) {
-        var cek_barang = cekIdBarang(rows);
-        var cek_harga_jual = validasiHargaJual(rows, id_customer);
 
-        if (cek_barang == false || cek_harga_jual == false) {
+    /**
+     * Set rule validasi
+     *
+     * @param rows
+     * @param id_customer
+     * @param status
+     * @returns {boolean}
+     */
+
+    function validasiSubmit(rows, id_customer, status) {
+        var cek_barang = validasiBarang(rows);
+        var cek_harga_jual = validasiHargaJual(rows, id_customer);
+        var cek_piutang = validasiPiutang(status);
+
+        if (cek_barang == false || cek_harga_jual == false || cek_piutang == false) {
             return false;
-        } if (cek_barang == true && cek_harga_jual == true) {
+        } if (cek_barang == true && cek_harga_jual == true && cek_piutang == true) {
             /**
              * todo : kalau sudah semua tolong di true kan
              */
             return false;
         }
+    }
+
+    /**
+     * Kumpulan Validasi
+     *
+     * @param status
+     */
+
+    function validasiPiutang(status) {
+        $.ajax({
+            method: 'post',
+            url: component_location + '/crud/validasi/valid_piutang.php',
+            data: {
+                'status' : status
+            },
+            success: function (parsing_data) {
+                var data = JSON.parse(parsing_data);
+                if (data.code !== 200) {
+                    $.messager.alert({
+                        title: 'Peringatan',
+                        icon: 'info',
+                        msg: data.pesan
+                    });
+                    return false;
+                } else if (data.code == 200) {
+                    return true;
+                }
+            }
+        });
     }
     
     function validasiHargaJual(rows, id_customer) {
@@ -575,7 +615,7 @@ $(document).ready(function () {
         });
     }
 
-    function cekIdBarang(rows) {
+    function validasiBarang(rows) {
         if (rows.length < 1) {
             $.messager.alert({
                 title: 'Peringatan',
@@ -627,6 +667,13 @@ $(document).ready(function () {
         }
     }
 
+    /**
+     * Digunakan apabila hanya ingin mengambil nama barang
+     *
+     * @param array
+     * @param id
+     * @returns {[]}
+     */
     function getNamaBarangIdentik(array, id) {
         var data = [];
         for (var x in array) {
