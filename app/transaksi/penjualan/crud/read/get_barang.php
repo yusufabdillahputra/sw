@@ -20,7 +20,7 @@ $db = new SQLAnywhere();
  * DOC : https://www.php.net/manual/en/function.htmlspecialchars.php
  */
 
-$sql = 'SELECT * FROM Barang';
+$sql = 'SELECT ID, NAMA FROM Barang ORDER BY NAMA ASC';
 $fetch = $db->get($sql, false);
 
 $result = array();

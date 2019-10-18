@@ -1,7 +1,7 @@
 <?php
 $script_path = 'app/transaksi/penjualan/script/content_faktur/ajax/window/';
 ?>
-<input id="dt_tipe_harga" type="hidden" value="<?= htmlspecialchars($_POST['dt_kode_tipe']) ?>">
+
 <div style="align:center; margin-bottom:20px">
     <table>
         <tr>
@@ -23,12 +23,12 @@ $script_path = 'app/transaksi/penjualan/script/content_faktur/ajax/window/';
             <th data-options="field:'harga_beli',width:80,align:'right'">Harga Beli</th>
             <th data-options="field:'harga_dasar',width:80,align:'right'">Harga Dasar</th>
             <th data-options="field:'harga_jual',width:220">Harga Jual</th>
-            <th data-options="field:'stok_update',width:60,align:'center'">Jumlah</th>
-            <th data-options="field:'nama_satuan',width:60,align:'center'">Satuan</th>
+            <th data-options="field:'jumlah',width:60,align:'center'">Jumlah</th>
+            <th data-options="field:'satuan_barang',width:60,align:'center'">Satuan</th>
             <th data-options="field:'pilih', checkbox:true">Pilih</th>
         </tr>
         </thead>
     </table>
 </div>
 
-<script type="text/javascript" src="<?= $script_path; ?>win_pencarian_barang.js"></script>
+<script type="text/javascript" src="<?= $script_path ?>win_pencarian_barang.js"></script>

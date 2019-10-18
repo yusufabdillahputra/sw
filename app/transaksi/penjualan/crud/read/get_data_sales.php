@@ -20,5 +20,14 @@ $db = new SQLAnywhere();
  * DOC : https://www.php.net/manual/en/function.htmlspecialchars.php
  */
 
-$sql = "SELECT id, nama FROM pegawai where tipe_peg = 'SLS'";
+$sql = "SELECT 
+            id, 
+            nama 
+        FROM 
+            pegawai 
+        where 
+            tipe_peg = 'SLS'
+        ORDER BY 
+            nama ASC
+        ";
 print $db->get($sql, true);

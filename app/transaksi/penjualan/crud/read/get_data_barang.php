@@ -22,29 +22,101 @@ $db = new SQLAnywhere();
 
 
 
-if (isset($_POST['tipe_harga'])) {
-    $tipe_harga = htmlspecialchars($_POST['tipe_harga']);
+if (isset($_POST['id_barang'])) {
     $id_barang = htmlspecialchars($_POST['id_barang']);
+    $id_cust   = htmlspecialchars($_POST['id_cust']);
+    $id_gudang = htmlspecialchars($_POST['id_gudang']);
 
-    $sql = "SELECT barang.*, satuan.*, STRING(barang.percolly, ' ', satuan.nama) as spesifikasi, (select nama from satuan where id = barang_gdg.satuan) as satuan_barang,
-    (select harga_beli from barang_sat where id = barang.ID and satuan = barang_gdg.satuan) as sat_harga_beli,
-    (select harga_dasar from barang_sat where id = barang.ID and satuan = barang_gdg.satuan) as sat_harga_dasar,
-    (select harga from barang_harga where kode_tipe = '$tipe_harga' and barang = barang.ID and satuan = barang_gdg.satuan) as set_harga_jual
-    FROM barang, satuan, barang_gdg 
-    where barang.satuan_id=satuan.id and barang.ID = barang_gdg.barang and barang.ID = '$id_barang'";
-    $fetch = $db->get($sql, false);
+    $sql = "DECLARE
+        @ls_satuan TEXT, 
+        @nm_satuan TEXT, 
+        @spek_colly TEXT, 
+        @idb_stok_update NUMERIC(10,2), 
+        @idb_stok_min INT, 
+        @ls_tipeharga TEXT, 
+        @ls_namabrg TEXT,
+        @li_nourut INT, 
+        @idb_harga_beli NUMERIC(10,2), 
+        @idb_harga_dasar NUMERIC(10,2), 
+        @li_konversi NUMERIC(8,2), 
+        @idb_harga_jual NUMERIC(10,2)
+        
+        SELECT 
+            @ls_satuan = satuan, 
+            @idb_stok_update = jumlah,
+            @idb_stok_min = stok_min
+        FROM 
+            barang_gdg 
+        WHERE 
+            barang = '$id_barang' 
+            AND gudang = '$id_gudang'
+        
+        SELECT 
+            @nm_satuan = nama 
+        FROM
+            satuan 
+        WHERE 
+            id = @ls_satuan
+        
+        SELECT 
+            @ls_tipeharga = kode_tipe 
+        FROM 
+            customer 
+        WHERE 
+            id = '$id_cust'
+        
+        SELECT 
+            @li_nourut = no_urut, 
+            @idb_harga_beli = harga_beli, 
+            @idb_harga_dasar = harga_dasar, 
+            @li_konversi = konversi
+        FROM 
+            barang_sat 
+        WHERE 
+            id = '$id_barang' 
+            AND satuan = @ls_satuan
+        
+        SELECT 
+            @idb_harga_jual = harga
+        FROM 
+            barang_harga 
+        WHERE 
+            barang = '$id_barang' 
+            AND kode_tipe = @ls_tipeharga 
+            AND satuan = @ls_satuan 
+            AND aktif = 'Y'
+        
+        SELECT 
+            @ls_namabrg = nama, 
+            @spek_colly = percolly 
+        FROM
+            barang 
+        WHERE 
+            id = '$id_barang'
+        
+        SELECT 
+        @ls_satuan AS id_satuan, 
+        @nm_satuan AS satuan_barang, 
+        @ls_namabrg AS nm_barang, 
+        STRING(@spek_colly, ' ', @nm_satuan) AS spesifikasi, 
+        @idb_stok_update AS stok_update, 
+        @idb_stok_min AS stok_min, 
+        @ls_tipeharga AS tipe_harga,
+        @li_nourut AS no_urut, 
+        @idb_harga_beli AS sat_harga_beli, 
+        @idb_harga_dasar AS sat_harga_dasar, 
+        @li_konversi AS konversi, 
+        @idb_harga_jual AS set_harga_jual";
+
+    $fetch = $db->first($sql, false);
 
     $result = array(
-        'barang'        => $fetch[0]['ID'],
-        'productname'   => $fetch[0]['NAMA'],
-        'nama_satuan'   => $fetch[0]['nama'],
-        'harga_beli'    => $fetch[0]['sat_harga_beli'],
-        'harga_dasar'   => $fetch[0]['sat_harga_dasar'],
-        'harga_jual'    => $fetch[0]['set_harga_jual'],
-        'spesifikasi'   => $fetch[0]['spesifikasi'],
-        'satuan_barang' => $fetch[0]['satuan_barang'],
-        'id_barang'     => $fetch[0]['id'],
-        'tipe_harga'    => $tipe_harga
+        'harga_beli'    => $fetch['sat_harga_beli'],
+        'harga_dasar'   => $fetch['sat_harga_dasar'],
+        'harga_jual'    => $fetch['set_harga_jual'],
+        'spesifikasi'   => $fetch['spesifikasi'],
+        'satuan_barang' => $fetch['satuan_barang'],
+        'id_barang'     => $fetch['id_satuan']
     );
 
     print json_encode($result);

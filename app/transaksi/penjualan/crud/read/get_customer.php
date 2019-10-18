@@ -20,7 +20,19 @@ $db = new SQLAnywhere();
  * DOC : https://www.php.net/manual/en/function.htmlspecialchars.php
  */
 
-$sql = "select cs.id, cs.nama, cs.kode_tipe, th.nama_tipe, dateformat(dateadd(day, cs.payment_due, NOW()),'dd/mm/yyyy') as tgl_jth_tempo, dateformat(NOW(), 'mm/dd/yyyy') as tgl_transaksi from customer cs, tipe_harga th where cs.kode_tipe = th.kode_tipe";
+$sql = "SELECT 
+            cs.id, 
+            cs.nama, 
+            cs.kode_tipe, 
+            th.nama_tipe, 
+            dateformat(dateadd(day, cs.payment_due, NOW()),'dd/mm/yyyy') as tgl_jth_tempo, 
+            dateformat(NOW(), 'mm/dd/yyyy') as tgl_transaksi 
+        FROM 
+            customer cs, tipe_harga th 
+        WHERE 
+            cs.kode_tipe = th.kode_tipe
+        ORDER BY
+            cs.nama ASC";
 $fetch = $db->get($sql, false);
 $result = array();
 foreach ($fetch as $row) {

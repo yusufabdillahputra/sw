@@ -1,10 +1,10 @@
 $(document).ready(function () {
     'use strict'
 
-    var component_location = 'app/transaksi/penjualan';
-    var panel_form = $('#panel_form_penjualan');
-    var numberbox_diskonpersen = $('#diskonpersen');
-    var numberbox_diskonrp = $('#diskonrp');
+    let component_location = 'app/transaksi/penjualan';
+    let panel_form = $('#panel_form_penjualan');
+    let numberbox_diskonpersen = $('#diskonpersen');
+    let numberbox_diskonrp = $('#diskonrp');
 
     panel_form.panel({
         fit: false,
@@ -77,7 +77,7 @@ $(document).ready(function () {
                     'customer_id': rec.id
                 },
                 success: function (parsing_data) {
-                    var data = JSON.parse(parsing_data);
+                    let data = JSON.parse(parsing_data);
                     if (data.status == true) {
                         $.messager.alert({
                             title: 'Peringatan',
@@ -124,16 +124,16 @@ $(document).ready(function () {
                 type: 'get',
                 url: component_location + '/crud/read/get_data_faktur.php',
                 success: function (data) {
-                    var vdata = JSON.parse(data);
-                    var dt_comp = vdata.comp_id;
-                    var dt_blnthn = vdata.blnthn;
-                    var dt_faktur = vdata.faktur;
+                    let vdata = JSON.parse(data);
+                    let dt_comp = vdata.comp_id;
+                    let dt_blnthn = vdata.blnthn;
+                    let dt_faktur = vdata.faktur;
 
-                    var dt_gudang = $('#dtgudang').combobox('getValue');
+                    let dt_gudang = $('#dtgudang').combobox('getValue');
 
-                    var no_faktur = dt_comp + '/' + dt_faktur + '/' + dt_blnthn + '/' + dt_gudang + '/JB';
+                    let no_faktur = dt_comp + '/' + dt_faktur + '/' + dt_blnthn + '/' + dt_gudang + '/JB';
 
-                    console.log('ini auto faktur', no_faktur);
+                    //console.log('ini auto faktur', no_faktur);
                     $('#no_faktur').textbox('setValue', no_faktur);
                 }
             });
@@ -149,9 +149,9 @@ $(document).ready(function () {
         max: 99,
         precision: 2,
         onChange: function (newValue, oldValue) {
-            var total = parseInt($('#total').numberbox('getValue'));
-            var jumlah = (parseInt(newValue) / 100) * total;
-            var parsing_total = total - (jumlah + numberbox_diskonrp.numberbox('getValue'));
+            let total = parseInt($('#total').numberbox('getValue'));
+            let jumlah = (parseInt(newValue) / 100) * total;
+            let parsing_total = total - (jumlah + numberbox_diskonrp.numberbox('getValue'));
             $('#grandtotal').numberbox('setValue', parsing_total);
         }
     });
@@ -166,13 +166,13 @@ $(document).ready(function () {
         width: 300,
         required: true,
         formatter: function (date) {
-            var y = date.getFullYear();
-            var m = date.getMonth() + 1;
-            var d = date.getDate();
+            let y = date.getFullYear();
+            let m = date.getMonth() + 1;
+            let d = date.getDate();
             return m + '/' + d + '/' + y;
         },
         parser: function (s) {
-            var t = Date.parse(s);
+            let t = Date.parse(s);
             if (!isNaN(t)) {
                 return new Date(t);
             } else {
@@ -184,9 +184,9 @@ $(document).ready(function () {
              * Contoh : 01/10/2019
              * @type {string}
              */
-            var date = new Date();
-            var date_sekarang = Date.parse((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear());
-            var tgl_input = Date.parse((date_input.getMonth() + 1) + "/" + date_input.getDate() + "/" + date_input.getFullYear());
+            let date = new Date();
+            let date_sekarang = Date.parse((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear());
+            let tgl_input = Date.parse((date_input.getMonth() + 1) + "/" + date_input.getDate() + "/" + date_input.getFullYear());
 
             if (tgl_input > date_sekarang) {
                 $.ajax({
@@ -196,7 +196,7 @@ $(document).ready(function () {
                         'tgl': (date_input.getMonth() + 1) + "/" + date_input.getDate() + "/" + date_input.getFullYear()
                     },
                     success: function (parsing_data) {
-                        var data = JSON.parse(parsing_data);
+                        let data = JSON.parse(parsing_data);
                         if (data.code == 401) {
                             $.messager.alert({
                                 title: 'Peringatan',
@@ -215,7 +215,7 @@ $(document).ready(function () {
                         'tgl': (date_input.getMonth() + 1) + "/" + date_input.getDate() + "/" + date_input.getFullYear()
                     },
                     success: function (parsing_data) {
-                        var data = JSON.parse(parsing_data);
+                        let data = JSON.parse(parsing_data);
                         if (data.code == 401) {
                             $.messager.alert({
                                 title: 'Peringatan',
@@ -248,9 +248,9 @@ $(document).ready(function () {
         min: 0,
         precision: 2,
         onChange: function (newValue, oldValue) {
-            var total = parseInt($('#total').numberbox('getValue'));
-            var convert_persen = (parseInt(numberbox_diskonpersen.numberbox('getValue')) / 100) * total;
-            var parsing_total = total - (parseInt(newValue) + convert_persen);
+            let total = parseInt($('#total').numberbox('getValue'));
+            let convert_persen = (parseInt(numberbox_diskonpersen.numberbox('getValue')) / 100) * total;
+            let parsing_total = total - (parseInt(newValue) + convert_persen);
             $('#grandtotal').numberbox('setValue', parsing_total);
         }
     });

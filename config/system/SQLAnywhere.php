@@ -35,6 +35,16 @@ class SQLAnywhere extends App {
                     $result[] = $row;
                 }
             }
+
+            /**
+             * Clean Up
+             */
+            sasql_free_result($query);
+            sasql_disconnect($this->connection);
+
+            /**
+             * Set result
+             */
             if ($json == true) {
                 return json_encode($result);
             } elseif ($json == false) {
@@ -59,6 +69,13 @@ class SQLAnywhere extends App {
                     $result[] = $row;
                 }
             }
+
+            /**
+             * Clean Up
+             */
+            sasql_free_result($query);
+            sasql_disconnect($this->connection);
+
             if ($json == true) {
                 return json_encode($result[0]);
             } elseif ($json == false) {
@@ -71,7 +88,7 @@ class SQLAnywhere extends App {
 
     public function insert($sql, $return_status = false) {
         try {
-            sasql_query($this->connection, $sql);
+            $query = sasql_query($this->connection, $sql);
             if ($return_status == true) {
                 $status = array(
                     'code' => 200,
@@ -80,6 +97,13 @@ class SQLAnywhere extends App {
                 );
                 return json_encode($status);
             }
+
+            /**
+             * Clean Up
+             */
+            sasql_free_result($query);
+            sasql_disconnect($this->connection);
+
         } catch (Exception $error) {
             $status = array(
                 'code' => 500,
@@ -92,7 +116,7 @@ class SQLAnywhere extends App {
 
     public function update($sql, $return_status = false) {
         try {
-            sasql_query($this->connection, $sql);
+            $query = sasql_query($this->connection, $sql);
             if ($return_status == true) {
                 $status = array(
                     'code' => 200,
@@ -101,6 +125,13 @@ class SQLAnywhere extends App {
                 );
                 return json_encode($status);
             }
+
+            /**
+             * Clean Up
+             */
+            sasql_free_result($query);
+            sasql_disconnect($this->connection);
+
         } catch (Exception $error) {
             $status = array(
                 'code' => 500,
@@ -113,7 +144,7 @@ class SQLAnywhere extends App {
 
     public function delete($sql, $return_status = false) {
         try {
-            sasql_query($this->connection, $sql);
+            $query = sasql_query($this->connection, $sql);
             if ($return_status == true) {
                 $status = array(
                     'code' => 200,
@@ -122,6 +153,13 @@ class SQLAnywhere extends App {
                 );
                 return json_encode($status);
             }
+
+            /**
+             * Clean Up
+             */
+            sasql_free_result($query);
+            sasql_disconnect($this->connection);
+
         } catch (Exception $error) {
             $status = array(
                 'code' => 500,

@@ -9,7 +9,7 @@ $(document).ready(function () {
     $('#wsearch').window({
         closed: true,
         collapsible: false,
-        minimizable: false
+        minimizable: false,
     });
 
 });

@@ -1,27 +1,76 @@
 <?php
+/**
+ * Autoload (Wajib include di semua CRUD)
+ */
+spl_autoload_register(function ($class_name) {
+    $php_self_exp = explode('/', $_SERVER['PHP_SELF']);
+    include($_SERVER['DOCUMENT_ROOT'] . '/' . $php_self_exp[1] . '/config/system/' . $class_name . '.php');
+});
+
+/**
+ * Path : root_path/config/SQLAnywhere
+ */
+$db = new SQLAnywhere();
+
+/**
+ * Proses CRUD
+ * Contoh : $db->get('sql_script', 'json_condition', 'result_type')
+ *
+ * Disarankan untuk menggunakan htmlspecialchars() setiap request POST/GET AJAX,
+ * DOC : https://www.php.net/manual/en/function.htmlspecialchars.php
+ */
+
 if (isset($_POST['kata_pencarian'])) {
     $kata_pencarian = htmlspecialchars($_POST['kata_pencarian']);
-    $tipe_harga = htmlspecialchars($_POST['tipe_harga']);
-    $conn = sasql_connect("ServerName=sejahtera;uid=DBA;PWD=fauzan123");
-    $sql = "SELECT barang.*, satuan.*, STRING(barang.percolly, ' ', satuan.nama) as spesifikasi, (select nama from satuan where id = barang_gdg.satuan) as satuan_barang,
-            (select harga_beli from barang_sat where id = barang.ID and satuan = barang_gdg.satuan) as sat_harga_beli,
-            (select harga_dasar from barang_sat where id = barang.ID and satuan = barang_gdg.satuan) as sat_harga_dasar,
-            (select harga from barang_harga where kode_tipe = '$tipe_harga' and barang = barang.ID and satuan = barang_gdg.satuan) as set_harga_jual
-            FROM barang, satuan, barang_gdg where barang.satuan_id=satuan.id and barang.ID = barang_gdg.barang AND barang.NAMA LIKE '%$kata_pencarian%'";
-    $query = sasql_query($conn, $sql);
+    $cust_id = htmlspecialchars($_POST['cust_id']);
+    $id_gudang = htmlspecialchars($_POST['id_gudang']);
+
+    $sql = "declare @tipe_harga TEXT
+
+            select @tipe_harga = kode_tipe from customer where id = '$cust_id'
+
+            select top 120
+                brg.ID, 
+                brg.NAMA, 
+                sat.harga_beli, 
+                sat.harga_dasar, 
+                hrg.harga as harga_jual,
+                gdg.jumlah,
+                st.nama,
+                STRING(brg.percolly,' ',st.nama) as spesifikasi
+            from barang_sat as sat 
+            left join barang_gdg as gdg 
+                on sat.id = gdg.barang
+                and sat.satuan = gdg.satuan
+            left join barang as brg
+                on brg.id = gdg.barang
+            left join satuan as st
+                on gdg.satuan = st.id
+            left join barang_harga as hrg
+                on brg.id = hrg.barang
+            where
+                gdg.gudang = '$id_gudang'
+            and brg.status = '1'
+            and hrg.kode_tipe = @tipe_harga
+            and brg.NAMA LIKE '%$kata_pencarian%'
+            order by
+                brg.NAMA asc";
+    $fetch = $db->get($sql, false);
+
     $result = array();
-    while ($row = sasql_fetch_array($query)) {
+    foreach ($fetch as $row) {
         array_push($result, [
-            'id_barang' => $row['ID'],
-            'nama_barang' => $row['NAMA'],
-            'nama_satuan' => $row['nama'],
-            'harga_beli' => $row['sat_harga_beli'],
-            'harga_dasar' => $row['sat_harga_dasar'],
-            'harga_jual' => $row['set_harga_jual'],
-            'spesifikasi' => $row['spesifikasi'],
-            'satuan_barang' => $row['satuan_barang']
+            'id_barang'     => $row['ID'],
+            'nama_barang'   => $row['NAMA'],
+            'harga_beli'    => $row['harga_beli'],
+            'harga_dasar'   => $row['harga_dasar'],
+            'harga_jual'    => $row['harga_jual'],
+            'jumlah'        => $row['jumlah'],
+            'satuan_barang' => $row['nama'],
+            'spesifikasi'   => $row['spesifikasi']
         ]);
     }
+
     $parsing_data = json_encode($result);
     ?>
     <table id="dg_cari_barang" style="width:auto;height:auto">
@@ -32,8 +81,8 @@ if (isset($_POST['kata_pencarian'])) {
             <th data-options="field:'harga_beli',width:80,align:'right'">Harga Beli</th>
             <th data-options="field:'harga_dasar',width:80,align:'right'">Harga Dasar</th>
             <th data-options="field:'harga_jual',width:220">Harga Jual</th>
-            <th data-options="field:'stok_update',width:60,align:'center'">Jumlah</th>
-            <th data-options="field:'nama_satuan',width:60,align:'center'">Satuan</th>
+            <th data-options="field:'jumlah',width:60,align:'center'">Jumlah</th>
+            <th data-options="field:'satuan_barang',width:60,align:'center'">Satuan</th>
             <th data-options="field:'pilih', checkbox:true">Pilih</th>
         </tr>
         </thead>
@@ -54,11 +103,11 @@ if (isset($_POST['kata_pencarian'])) {
                 onLoadSuccess: function() {
                     <?php
                     if (isset($_POST['row_in_select'])) {
-                    foreach ($_POST['row_in_select'] as $key_array => $data) {
-                    ?>
-                    $('#dg_cari_barang').datagrid('selectRecord', <?= $data; ?>);
-                    <?php
-                    }
+                        foreach ($_POST['row_in_select'] as $key_array => $data) {
+                        ?>
+                        $('#dg_cari_barang').datagrid('selectRecord', <?= $data; ?>);
+                        <?php
+                        }
                     }
                     ?>
                 },

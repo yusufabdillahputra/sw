@@ -1,10 +1,10 @@
 $(document).ready(function () {
     'use strict'
 
-    var component_location = 'app/transaksi/penjualan';
-    var editIndex = undefined;
-    var vno = 1;
-    var dg_penjualan = $('#dg_penjualan');
+    let component_location = 'app/transaksi/penjualan';
+    let editIndex = undefined;
+    let vno = 1;
+    let dg_penjualan = $('#dg_penjualan');
 
     /**
      * Konfigurasi datagrid dg_penjualan
@@ -116,35 +116,36 @@ $(document).ready(function () {
                                 url: component_location + '/crud/read/get_data_barang.php',
                                 method: 'post',
                                 data: {
-                                    'tipe_harga': $('#dt_kode_tipe').val(),
-                                    'id_barang': value.barang
+                                    'id_barang': value.barang,
+                                    'id_cust': $('#dtcustomer').combobox('getValue'),
+                                    'id_gudang': $('#dtgudang').combobox('getValue')
                                 },
                                 success: function (parsing_data) {
-                                    var data = JSON.parse(parsing_data);
-                                    var dg = $('#dg_penjualan');
-                                    var row = dg.datagrid('getSelected');
-                                    var rowIndex = dg.datagrid('getRowIndex', row);
-                                    var ed1 = dg.datagrid('getEditor', {
+                                    let data = JSON.parse(parsing_data);
+                                    let dg = $('#dg_penjualan');
+                                    let row = dg.datagrid('getSelected');
+                                    let rowIndex = dg.datagrid('getRowIndex', row);
+                                    let ed1 = dg.datagrid('getEditor', {
                                         index: rowIndex,
                                         field: 'satuan'
                                     });
-                                    var ed2 = dg.datagrid('getEditor', {
+                                    let ed2 = dg.datagrid('getEditor', {
                                         index: rowIndex,
                                         field: 'harga_beli'
                                     });
-                                    var ed3 = dg.datagrid('getEditor', {
+                                    let ed3 = dg.datagrid('getEditor', {
                                         index: rowIndex,
                                         field: 'harga_dasar'
                                     });
-                                    var ed4 = dg.datagrid('getEditor', {
+                                    let ed4 = dg.datagrid('getEditor', {
                                         index: rowIndex,
                                         field: 'harga_jual'
                                     });
-                                    var ed5 = dg.datagrid('getEditor', {
+                                    let ed5 = dg.datagrid('getEditor', {
                                         index: rowIndex,
                                         field: 'spesifikasi'
                                     });
-                                    var ed6 = dg.datagrid('getEditor', {
+                                    let ed6 = dg.datagrid('getEditor', {
                                         index: rowIndex,
                                         field: 'idbarang'
                                     });
@@ -313,7 +314,7 @@ $(document).ready(function () {
                 if (endEditing()) {
                     $('#dg_penjualan').datagrid('selectRow', index)
                         .datagrid('beginEdit', index);
-                    var ed = $('#dg_penjualan').datagrid('getEditor', {
+                    let ed = $('#dg_penjualan').datagrid('getEditor', {
                         index: index,
                         field: field
                     });
@@ -329,70 +330,70 @@ $(document).ready(function () {
             }
         },
         onEndEdit: function (index, row, changes) {
-            var ed = $(this).datagrid('getEditor', {
+            let ed = $(this).datagrid('getEditor', {
                 index: index,
                 field: 'barang'
             });
             row.productname = $(ed.target).combobox('getText');
         },
         onBeginEdit: function (rowIndex) {
-            var dg_tbl = $('#dg_penjualan');
-            var editors = dg_tbl.datagrid('getEditors', rowIndex);
-            var jumlah_barang = $(editors[0].target); // jumlah
-            var harga_beli = $(editors[4].target); // harga jual
-            var harga_dasar = $(editors[5].target); // harga jual
-            var harga_jual = $(editors[6].target); // harga jual
+            let dg_tbl = $('#dg_penjualan');
+            let editors = dg_tbl.datagrid('getEditors', rowIndex);
+            let jumlah_barang = $(editors[0].target); // jumlah
+            let harga_beli = $(editors[4].target); // harga jual
+            let harga_dasar = $(editors[5].target); // harga jual
+            let harga_jual = $(editors[6].target); // harga jual
 
-            var diskon_persen = $(editors[7].target); // diskon persen
-            var diskon_rupiah = $(editors[8].target); // diskon rupiah
+            let diskon_persen = $(editors[7].target); // diskon persen
+            let diskon_rupiah = $(editors[8].target); // diskon rupiah
 
-            var sub_total = $(editors[9].target); // subtotal
-            var profit = $(editors[13].target); // profit
+            let sub_total = $(editors[9].target); // subtotal
+            let profit = $(editors[13].target); // profit
             
             jumlah_barang.numberbox({
                 onChange: function (newValue, oldValue) {
-                    var jumlah = newValue * harga_jual.numberbox('getValue');
+                    let jumlah = newValue * harga_jual.numberbox('getValue');
                     sub_total.numberbox('setValue', jumlah);
 
-                    var rumus_profit = jumlah - harga_dasar.numberbox('getValue');
+                    let rumus_profit = jumlah - harga_dasar.numberbox('getValue');
                     profit.numberbox('setValue', rumus_profit);
                 }
             })
             diskon_persen.numberbox({
                 onChange: function (newValue, oldValue) {
-                    var index_jumlah = jumlah_barang.numberbox('getValue');
-                    var index_harga_jual = harga_jual.numberbox('getValue');
-                    var index_harga_dasar = harga_dasar.numberbox('getValue');
-                    var total_jumlah_harga = index_jumlah * index_harga_jual;
-                    var jumlah = (newValue / 100) * total_jumlah_harga;
-                    var old_sub_total = total_jumlah_harga;
-                    var total = old_sub_total - (jumlah + diskon_rupiah.numberbox('getValue'));
+                    let index_jumlah = jumlah_barang.numberbox('getValue');
+                    let index_harga_jual = harga_jual.numberbox('getValue');
+                    let index_harga_dasar = harga_dasar.numberbox('getValue');
+                    let total_jumlah_harga = index_jumlah * index_harga_jual;
+                    let jumlah = (newValue / 100) * total_jumlah_harga;
+                    let old_sub_total = total_jumlah_harga;
+                    let total = old_sub_total - (jumlah + diskon_rupiah.numberbox('getValue'));
                     sub_total.numberbox('setValue', total);
 
-                    var rumus_profit = total - index_harga_dasar;
+                    let rumus_profit = total - index_harga_dasar;
                     profit.numberbox('setValue', rumus_profit);
                 }
             });
             diskon_rupiah.numberbox({
                 onChange: function (newValue, oldValue) {
-                    var rupiah_input = Number(newValue);
-                    var index_jumlah = jumlah_barang.numberbox('getValue');
-                    var index_harga_jual = harga_jual.numberbox('getValue');
-                    var total_jumlah_harga = index_jumlah * index_harga_jual;
-                    var convert_persen = (diskon_persen.numberbox('getValue') / 100) * total_jumlah_harga;
-                    var total = total_jumlah_harga - (rupiah_input + convert_persen);
+                    let rupiah_input = Number(newValue);
+                    let index_jumlah = jumlah_barang.numberbox('getValue');
+                    let index_harga_jual = harga_jual.numberbox('getValue');
+                    let total_jumlah_harga = index_jumlah * index_harga_jual;
+                    let convert_persen = (diskon_persen.numberbox('getValue') / 100) * total_jumlah_harga;
+                    let total = total_jumlah_harga - (rupiah_input + convert_persen);
                     sub_total.numberbox('setValue', total);
 
-                    var index_harga_dasar = harga_dasar.numberbox('getValue');
-                    var rumus_profit = total - index_harga_dasar;
+                    let index_harga_dasar = harga_dasar.numberbox('getValue');
+                    let rumus_profit = total - index_harga_dasar;
                     profit.numberbox('setValue', rumus_profit);
                 }
             });
             harga_jual.numberbox({
                 onChange: function (newValue, oldValue) {
-                    var rupiah_input = Number(newValue);
-                    var val_harga_beli = harga_beli.numberbox('getValue');
-                    var val_harga_dasar = harga_dasar.numberbox('getValue');
+                    let rupiah_input = Number(newValue);
+                    let val_harga_beli = harga_beli.numberbox('getValue');
+                    let val_harga_dasar = harga_dasar.numberbox('getValue');
                     if (rupiah_input < val_harga_beli && rupiah_input < val_harga_dasar) {
                         $.messager.alert({
                             title: 'Peringatan',
@@ -410,11 +411,11 @@ $(document).ready(function () {
             });
         },
         onAfterEdit: function (index, row, changes) {
-            var data = $('#dg_penjualan').datagrid('getData');
-            var rows = data.rows;
-            var sum = 0;
-            var hpp = 0;
-            var prf = 0;
+            let data = $('#dg_penjualan').datagrid('getData');
+            let rows = data.rows;
+            let sum = 0;
+            let hpp = 0;
+            let prf = 0;
 
             let i;
             for (i = 0; i < rows.length; i++) {
@@ -442,17 +443,8 @@ $(document).ready(function () {
      * @return void
      */
     function searchBarang() {
-        $.ajax({
-            url: component_location + '/component/content_faktur/ajax/window/win_pencarian_barang.php',
-            method: 'post',
-            data: {
-                'dt_kode_tipe': $('#dt_kode_tipe').val()
-            },
-            success: function (parsing_data) {
-                $('#wsearch').html(parsing_data);
-                $('#wsearch').window('open');
-            }
-        });
+        $('#wsearch').window('refresh', component_location + '/component/content_faktur/ajax/window/win_pencarian_barang.php');
+        $('#wsearch').window('open');
     }
 
     function endEditing() {
@@ -491,10 +483,10 @@ $(document).ready(function () {
     function acceptit() {
         if (endEditing()) {
             $('#dg_penjualan').datagrid('acceptChanges');
-            var data = $('#dg_penjualan').datagrid('getData');
-            var rows = data.rows;
-            var id_customer = $('#dtcustomer').combobox('getValue');
-            var status = $('input[name=status]:checked', '#formid').val();
+            let data = $('#dg_penjualan').datagrid('getData');
+            let rows = data.rows;
+            let id_customer = $('#dtcustomer').combobox('getValue');
+            let status = $('input[name=status]:checked', '#formid').val();
 
             $('#formid').form('submit', {
                 url: component_location + '/crud/create/save_hdr_penjualan.php',
@@ -533,9 +525,9 @@ $(document).ready(function () {
      */
 
     function validasiSubmit(rows, id_customer, status) {
-        var cek_barang = validasiBarang(rows);
-        var cek_harga_jual = validasiHargaJual(rows, id_customer);
-        var cek_piutang = validasiPiutang(status);
+        let cek_barang = validasiBarang(rows);
+        let cek_harga_jual = validasiHargaJual(rows, id_customer);
+        let cek_piutang = validasiPiutang(status);
 
         if (cek_barang == false || cek_harga_jual == false || cek_piutang == false) {
             return false;
@@ -561,7 +553,7 @@ $(document).ready(function () {
                 'status' : status
             },
             success: function (parsing_data) {
-                var data = JSON.parse(parsing_data);
+                let data = JSON.parse(parsing_data);
                 if (data.code !== 200) {
                     $.messager.alert({
                         title: 'Peringatan',
@@ -577,10 +569,10 @@ $(document).ready(function () {
     }
     
     function validasiHargaJual(rows, id_customer) {
-        var jumlah = [];
-        var harga_dasar = [];
-        var subtotal = [];
-        var nama_barang = [];
+        let jumlah = [];
+        let harga_dasar = [];
+        let subtotal = [];
+        let nama_barang = [];
         rows.forEach(function (item, index) {
             jumlah.push(Number(item.jumlah));
             harga_dasar.push(Number(item.harga_dasar));
@@ -600,7 +592,7 @@ $(document).ready(function () {
                 'id_customer' : id_customer
             },
             success: function (parsing_data) {
-                var data = JSON.parse(parsing_data);
+                let data = JSON.parse(parsing_data);
                 if (data.code !== 200) {
                     $.messager.alert({
                         title: 'Peringatan',
@@ -649,11 +641,11 @@ $(document).ready(function () {
              * DOC : https://www.jeasyui.com/documentation/form.php
              */
             if (typeof not_unique_id !== 'undefined' && not_unique_id.length >= 1) {
-                var join_str_nama_barang = [];
+                let join_str_nama_barang = [];
                 not_unique_id.forEach(function (item) {
                     join_str_nama_barang.push(getNamaBarangIdentik(rows, item));
                 });
-                var str_nama_barang = join_str_nama_barang.join(', ');
+                let str_nama_barang = join_str_nama_barang.join(', ');
                 console.log(str_nama_barang);
                 $.messager.alert({
                     title: 'Peringatan',
@@ -675,8 +667,8 @@ $(document).ready(function () {
      * @returns {[]}
      */
     function getNamaBarangIdentik(array, id) {
-        var data = [];
-        for (var x in array) {
+        let data = [];
+        for (let x in array) {
             if (array[x].barang == id) {
                 data.push(array[x].productname);
                 break;
@@ -693,8 +685,8 @@ $(document).ready(function () {
      * @returns {[]}
      */
     function getBarangIdentik(array, id) {
-        var data = [];
-        for (var x in array) {
+        let data = [];
+        for (let x in array) {
             if (array[x].barang == id) {
                 data.push(array[x]);
                 break;
@@ -709,7 +701,7 @@ $(document).ready(function () {
     }
 
     function getChanges() {
-        var rows = $('#dg_penjualan').datagrid('getChanges');
+        let rows = $('#dg_penjualan').datagrid('getChanges');
         alert(rows.length + ' rows are changed!');
     }
 
