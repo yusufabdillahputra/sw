@@ -1,7 +1,6 @@
 <?php
-$script_path = 'app/transaksi/penjualan/script/content_faktur/ajax/window/';
+$script_path = 'app/transaksi/penjualan/script/content_faktur/ajax/insert_penjualan/';
 ?>
-
 <div style="align:center; margin-bottom:20px">
     <table>
         <tr>
@@ -31,4 +30,4 @@ $script_path = 'app/transaksi/penjualan/script/content_faktur/ajax/window/';
     </table>
 </div>
 
-<script type="text/javascript" src="<?= $script_path ?>win_pencarian_barang.js"></script>
+<script type="text/javascript" src="<?= $script_path ?>search.js"></script>

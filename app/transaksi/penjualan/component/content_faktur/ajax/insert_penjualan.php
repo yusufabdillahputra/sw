@@ -83,9 +83,10 @@
 <table id="dg_penjualan" style="height: 800px;"></table>
 
 <div id="wsearch" title="Search Barang" style="width:900px;height:500px;padding:10px;"></div>
+
 <?php
 $script_path = 'app/transaksi/penjualan/script/content_faktur/ajax/insert_penjualan/';
 ?>
 <script type="text/javascript" src="<?= $script_path; ?>form.js"></script>
-<script type="text/javascript" src="<?= $script_path; ?>window.js"></script>
 <script type="text/javascript" src="<?= $script_path; ?>edatagrid.js"></script>
+<script type="text/javascript" src="<?= $script_path; ?>window.js"></script>

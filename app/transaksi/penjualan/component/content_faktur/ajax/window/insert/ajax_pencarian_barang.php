@@ -100,13 +100,17 @@ if (isset($_POST['kata_pencarian'])) {
                  * Setelah data success di load maka akan di cek data mana yang sebelumnya telah
                  * di select
                  */
-                onLoadSuccess: function() {
+                onLoadSuccess: function(data) {
+                    let cek_id = getJustID(data.rows);
                     <?php
                     if (isset($_POST['row_in_select'])) {
                         foreach ($_POST['row_in_select'] as $key_array => $data) {
-                        ?>
-                        $('#dg_cari_barang').datagrid('selectRecord', <?= $data; ?>);
-                        <?php
+                            ?>
+                            var cek = cek_id.includes('<?= $data ?>');
+                            if (cek == true) {
+                                $('#dg_cari_barang').datagrid('selectRecord', '<?= $data; ?>');
+                            }
+                            <?php
                         }
                     }
                     ?>
@@ -155,6 +159,10 @@ if (isset($_POST['kata_pencarian'])) {
                         });
                     }
                 }
+
+
+
+
             });
 
             /**
@@ -179,7 +187,7 @@ if (isset($_POST['kata_pencarian'])) {
             function getJustID(array) {
                 var data = [];
                 for (var x in array) {
-                    data.push(array[x].barang);
+                    data.push(array[x].id_barang);
                 }
                 return data;
             }

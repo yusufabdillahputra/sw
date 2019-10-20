@@ -427,8 +427,8 @@ $(document).ready(function () {
      * @return void
      */
     function searchBarang() {
-        $('#wsearch').window('refresh', component_location + '/component/content_faktur/ajax/window/win_pencarian_barang.php');
-        $('#wsearch').window('open');
+        $('#e_wsearch').window('refresh', component_location + '/component/content_faktur/ajax/window/edit/win_pencarian_barang.php');
+        $('#e_wsearch').window('open');
     }
 
     function endEditing() {

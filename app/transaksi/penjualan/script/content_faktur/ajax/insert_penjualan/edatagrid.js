@@ -443,7 +443,7 @@ $(document).ready(function () {
      * @return void
      */
     function searchBarang() {
-        $('#wsearch').window('refresh', component_location + '/component/content_faktur/ajax/window/win_pencarian_barang.php');
+        $('#wsearch').window('refresh', component_location + '/component/content_faktur/ajax/window/insert/win_pencarian_barang.php');
         $('#wsearch').window('open');
     }
 

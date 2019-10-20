@@ -1,0 +1,33 @@
+<?php
+$script_path = 'app/transaksi/penjualan/script/content_faktur/ajax/edit_penjualan/';
+?>
+<div style="align:center; margin-bottom:20px">
+    <table>
+        <tr>
+            <td>
+                <input id="e_tb_kata_pencarian" type="text" name="kata_pencarian" style="width:300px">
+            </td>
+            <td>
+                <button id="e_bt_submit" class="easyui-linkbutton" style="width:80px" type="submit">Submit</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="AJAX_e_dg_cari_barang">
+    <table idField="id_barang" id="e_dg_cari_barang" style="width:auto;height:auto">
+        <thead>
+        <tr>
+            <th data-options="field:'id_barang',width:80">Kode</th>
+            <th data-options="field:'nama_barang',width:200">Nama Barang</th>
+            <th data-options="field:'harga_beli',width:80,align:'right'">Harga Beli</th>
+            <th data-options="field:'harga_dasar',width:80,align:'right'">Harga Dasar</th>
+            <th data-options="field:'harga_jual',width:220">Harga Jual</th>
+            <th data-options="field:'jumlah',width:60,align:'center'">Jumlah</th>
+            <th data-options="field:'satuan_barang',width:60,align:'center'">Satuan</th>
+            <th data-options="field:'pilih', checkbox:true">Pilih</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<script type="text/javascript" src="<?= $script_path ?>search.js"></script>

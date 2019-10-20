@@ -3,7 +3,9 @@ $(document).ready(function () {
 
     let component_location = 'app/transaksi/penjualan';
 
-    $('#dg_cari_barang').datagrid({
+    let dg = $('#e_dg_penjualan');
+
+    $('#e_dg_cari_barang').datagrid({
         onBeforeLoad: function() {
             $.ajax({
                 async: false,
@@ -12,12 +14,13 @@ $(document).ready(function () {
                 url: component_location+'/crud/read/get_cari_barang.php',
                 method: 'post',
                 data: {
-                    'cust_id': $('#dtcustomer').combobox('getValue'),
-                    'id_gudang': $('#dtgudang').combobox('getValue')
+                    'cust_id': $('#e_dtcustomer').combobox('getValue'),
+                    'id_gudang': $('#e_dtgudang').combobox('getValue'),
+
                 },
                 success: function (parsing_data) {
                     let json_data = JSON.parse(parsing_data);
-                    $('#dg_cari_barang').datagrid('loadData',json_data);
+                    $('#e_dg_cari_barang').datagrid('loadData',json_data);
                 }
             });
         },
@@ -26,7 +29,7 @@ $(document).ready(function () {
              * Set data yang akan di parsing ke datagrid
              * Penambahan data JSON dapat di set di file cari_barang.php
              */
-            $('#dg_penjualan').datagrid('appendRow', {
+            dg.datagrid('appendRow', {
                 barang: rowData.id_barang,
                 productname: rowData.nama_barang,
                 satuan: rowData.satuan_barang,
@@ -37,7 +40,6 @@ $(document).ready(function () {
             });
         },
         onUnselect: function (rowIndex, rowData) {
-            let dg = $('#dg_penjualan');
             let rows = dg.datagrid('getRows');
             /**
              * Logic penghapusan baris
@@ -55,27 +57,25 @@ $(document).ready(function () {
             dg.datagrid('loadData', data);
         }
     });
-
-    $('#tb_kata_pencarian').textbox({
+    $('#e_tb_kata_pencarian').textbox({
         label: 'Nama Barang',
         required: false,
         labelWidth: '100px',
     });
-
-    $('#bt_submit').on('click', function () {
-        let kata_pencarian = $('#tb_kata_pencarian').val();
-        let row_in_penjualan = $('#dg_penjualan').datagrid('getRows');
+    $('#e_bt_submit').on('click', function () {
+        let kata_pencarian = $('#e_tb_kata_pencarian').val();
+        let row_in_penjualan = $('#e_dg_penjualan').datagrid('getRows');
         $.ajax({
-            url: component_location+'/component/content_faktur/ajax/window/ajax_pencarian_barang.php',
+            url: component_location+'/component/content_faktur/ajax/window/edit/ajax_pencarian_barang.php',
             method: 'post',
             data: {
                 'kata_pencarian': kata_pencarian,
                 'row_in_select': getJustID(row_in_penjualan),
-                'cust_id': $('#dtcustomer').combobox('getValue'),
-                'id_gudang': $('#dtgudang').combobox('getValue')
+                'cust_id': $('#e_dtcustomer').combobox('getValue'),
+                'id_gudang': $('#e_dtgudang').combobox('getValue')
             },
             success: function (parsing_data) {
-                $('#AJAX_dg_cari_barang').html(parsing_data);
+                $('#AJAX_e_dg_cari_barang').html(parsing_data);
             }
         });
     });
@@ -90,7 +90,7 @@ $(document).ready(function () {
 
     /**
      *
-     * @param {*} data : berasal dari dg_penjualan , todo : sesuaian dengan nama fieldnya
+     * @param {*} data : berasal dari e_dg_penjualan , todo : sesuaian dengan nama fieldnya
      * @param {*} id
      */
     function getDGPenjualanRowIndex(data, id) {

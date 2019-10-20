@@ -115,9 +115,9 @@ $(document).ready(function() {
                              */
                             $('#e_no_faktur').textbox('setValue', data.header.no_faktur);
                             $('#e_dtjth_tempo').textbox('setValue', data.header.tgl_jthtempo);
-                            $('#e_dtgudang').combobox('setValue', data.header.nama_gudang);
+                            $('#e_dtgudang').combobox('setValue', data.header.gudang_id);
                             $('#e_total').numberbox('setValue', data.header.total);
-                            $('#e_dtcustomer').combobox('setValue', data.header.nama_customer);
+                            $('#e_dtcustomer').combobox('setValue', data.header.customer_id);
                             $('#e_diskonpersen').numberbox('setValue', data.header.discountp);
                             $('#e_diskonrp').numberbox('setValue', data.header.discountn);
                             $('#e_dtmobil').combobox('setValue', data.header.nama_mobil);
