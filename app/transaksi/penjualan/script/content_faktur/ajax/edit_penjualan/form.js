@@ -148,23 +148,19 @@ $(document).ready(function () {
         width: 300,
         required: true,
         formatter: function (date) {
-            var y = date.getFullYear();
-            var m = date.getMonth() + 1;
-            var d = date.getDate();
-            return y + '-' + (m < 10 ? ('0' + m) : m) + '-' + (d < 10 ? ('0' + d) : d);
+            let y = date.getFullYear();
+            let m = date.getMonth() + 1;
+            let d = date.getDate();
+            return m + '/' + d + '/' + y;
         },
         parser: function (s) {
-            if (!s) return new Date();
-            var ss = (s.split('-'));
-            var y = parseInt(ss[0], 10);
-            var m = parseInt(ss[1], 10);
-            var d = parseInt(ss[2], 10);
-            if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
-                return new Date(d, m - 1, y);
+            let t = Date.parse(s);
+            if (!isNaN(t)) {
+                return new Date(t);
             } else {
                 return new Date();
             }
-        }
+        },
     });
 
     $('#e_dtmobil').combobox({

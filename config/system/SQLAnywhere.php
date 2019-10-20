@@ -23,7 +23,8 @@ class SQLAnywhere extends App {
      */
     public function get($sql, $json = false, $result_type = 'ARRAY') {
         try {
-            $query = sasql_query($this->connection, $sql);
+            $connection = sasql_connect("ServerName=sejahtera_new;uid=dba;PWD=sejahtera2");
+            $query = sasql_query($connection, $sql);
             if ($result_type == 'ARRAY') {
                 $result = array();
                 while ($row = sasql_fetch_assoc($query)) {
@@ -40,7 +41,7 @@ class SQLAnywhere extends App {
              * Clean Up
              */
             sasql_free_result($query);
-            sasql_disconnect($this->connection);
+            sasql_disconnect($connection);
 
             /**
              * Set result

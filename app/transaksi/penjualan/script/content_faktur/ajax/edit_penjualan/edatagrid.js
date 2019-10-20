@@ -427,17 +427,8 @@ $(document).ready(function () {
      * @return void
      */
     function searchBarang() {
-        $.ajax({
-            url: component_location + '/component/content_faktur/ajax/window/win_pencarian_barang.php',
-            method: 'post',
-            data: {
-                'dt_kode_tipe': $('#e_dt_kode_tipe').val()
-            },
-            success: function (parsing_data) {
-                $('#e_wsearch').html(parsing_data);
-                $('#e_wsearch').window('open');
-            }
-        });
+        $('#wsearch').window('refresh', component_location + '/component/content_faktur/ajax/window/win_pencarian_barang.php');
+        $('#wsearch').window('open');
     }
 
     function endEditing() {
